@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var $ = require('jquery');
+let svn = require('svn');
 //import mongoose
 var mongoose = require(`mongoose`);
 
