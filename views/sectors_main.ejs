@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Sectors Main Page</title>
+</head>
+<body>
+<h1>Main Sectors Page</h1>
+<%if (sectors != null) { %>
+    <% var num_sectors =  sectors.length%>
+
+    <span>Total Number of Sectors: <%=num_sectors%> </span>
+    <ul class="sectors">
+        <% for(var i=0; i < sectors.length; i++) {%>
+            <li class="sector">
+                <span><a href ='/sectors/<%= sectors[i] %>' ><%= sectors[i] %></a></span>
+
+            </li>
+        <% } %>
+    </ul>
+<% } %>
+
+
+<span> <a href ='/stocks' > Go to main stocks page</a></span>
+
+<br>
+
+<span> <a href ='/' > Go to main  page </a></span>
+
+
+<form class ='insert sector' action="/sectors/" method="Post">
+    <input type="text" placeholder="sector name" name="name">
+    <button type="submit">Insert sector</button>
+</form>
+
+
+
+
+</body>
+</html>

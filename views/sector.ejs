@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sector Page:  <%= sector%> </title>
+</head>
+<body>
+<h1> Sector Page - <%= sector%> </h1>
+
+
+<%if (stocks_by_sector != null) { %>
+
+
+    <h2 style="padding-left: 50%">Sector Stocks</h2>
+    <table class="stock" style="width:100%">
+        <tr>
+            <th style="float:left>Name</th>
+            <th>Symbol</th>
+            <th>Sector</th>
+        </tr>
+        <% for(var i=0; i < stocks_by_sector.length ; i++) {%>
+            <tr>
+                <th class="stock"><a href ='/stocks/<%= stocks_by_sector[i].Name %>' ><%= stocks_by_sector[i].Name %></a></th>
+                <th><a href ='/stocks/<%= stocks_by_sector[i].Name %>' ><%= stocks_by_sector[i].Symbol %></a></th>
+                <th><a href ='/sectors/<%= stocks_by_sector[i].Sector %>' ><%= stocks_by_sector[i].Sector %></a></th>
+            </tr>
+        <% } %>
+
+    </table>
+<% } %>
+
+<span> <a href ='/sectors' > Go to main sectors page</a></span>
+<br>
+
+<span> <a href ='/' > Go to main  page </a></span>
+
+
+<!--<form class ='insert sector' action="/sectors/" method="Post">-->
+<!--    <input type="text" placeholder="sector name" name="name">-->
+<!--    <button type="submit">Insert sector</button>-->
+<!--</form>-->
+
+
+
+
+</body>
+</html>

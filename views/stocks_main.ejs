@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stocks Main Page</title>
+</head>
+<body>
+<h1>Stocks Main Page</h1>
+
+
+<%if (stocks != null) { %>
+
+
+    <h2 style="padding-left:50%;margin-bottom: 20px;">TOP 10 STOCKS</h2>
+    <table class="stocks" style="width:100%">
+        <tr>
+            <th style="float:left">Name</th>
+            <th>Symbol</th>
+            <th>Sector</th>
+        </tr>
+        <% for(var i=0; i < stocks.length ; i++) {%>
+            <tr>
+                <th class="stocks"><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Name %></a></th>
+                <th><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Symbol %></a></th>
+                <th><a href ='/sectors/<%= stocks[i].Sector %>' ><%= stocks[i].Sector %></a></th>
+            </tr>
+        <% } %>
+    </table>
+
+
+    <!--<% for(var i=0; i < stocks.length && i<10; i++) {%>-->
+    <!--        <li class="stock">-->
+    <!--            <span><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Name %></a></span>-->
+    <!--            <span><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Symbol %></a></span>-->
+    <!--            <span><a href ='/sectors/<%= stocks[i].Sector %>' ><%= stocks[i].Sector %></a></span>-->
+
+    <!--        </li>-->
+    <!--    <% } %>-->
+    <!--</ul>-->
+<!--<% } %>-->
+
+
+<span> <a href ='/sectors' > Go to main sectors page</a></span>
+<span> <a href ='/' > Go to main  page </a></span>
+
+
+<form class ='insert stock' action="/stocks/insert" method="Post">
+    <input type="text" placeholder="stock name" name="name">
+    <input type="text" placeholder="stock symbol" name="symbol">
+    <input type="text" placeholder="sector" name="sector">
+    <button type="submit">Insert Stock</button>
+</form>
+
+<form class ='remove stock' action="/stocks/remove" method="Post">
+    <input type="text" placeholder="stock name" name="name">
+    <button type="submit">Remove Stock</button>
+</form>
+
+
+</body>
+</html>
