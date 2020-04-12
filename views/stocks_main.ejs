@@ -10,57 +10,36 @@
 </head>
 <body>
     <script>
-
+        //Behavior after delete function
         function remove_call_back(delete_result) {
             console.log('in remove_call_back:',delete_result);
             if (delete_result.err == 'True'){
-            console.log(delete_result,"FAIL");
-            $("#stock_delete_errr")[0].innerHTML = "<span >"+delete_result.msg+"</span>";
-
-        }
+                console.log(delete_result,"FAIL");
+                $("#stock_delete_errr")[0].innerHTML = "<span >"+delete_result.msg+"</span>";
+            }
             else {
             $("#stock_delete_errr")[0].innerHTML = "Deleted:"+delete_result.msg.value.Name;
 
-        }
+            }
 
         }
-
+        //parse parameters before init function
         function remove_stock() {
             let stock_to_remove = $("#remove_stock_name")[0].value;
             $("#stock_delete_errr")[0].innerHTML = "";
-        return remove_stock_request(stock_to_remove,remove_call_back);
+            return remove_stock_request(stock_to_remove,remove_call_back);
 
         }
 
 
 
 
-        function relocate(location) {
-        window.location.href='../'+location;
-    }
-
-        function clicked_search_button() {
-        $("#not_found")[0].style.visibility = 'hidden';
-        var search_value = $("#search_input").val();
-        // console.log(search_value);
-        var client = new HttpClient();
-        let r = null;
-        client.get('/search/'+search_value, function(response) {
-        r = response;
-        if (r=="")   { $("#not_found")[0].style.visibility = 'visible'; return;}
 
 
 
-
-        let new_stocks =JSON.parse(r);
-        update_stock_table([new_stocks  ]);
-
-
-
-        });
-
-    }
-
+    //Parse input
+        //Call server
+        //notify on error or redirect to new page
     function insert_stock() {
         let stock_name = $("#insert_name")[0].value;
         let stock_symbol = $("#insert_symbol")[0].value;
@@ -90,6 +69,7 @@
         console.log('returned false');
         return
     }
+        //Relocate to new page - was supposed to be different
         window.location.href='../stocks/'+data.name;
 
 
@@ -217,8 +197,8 @@
 <!--<% } %>-->
 
 
-<button class='button' onclick="relocate('sectors')">Go to main sectors page</span>
-<button class='button' onclick="relocate('')">Go to main  page</span>
+<button class='button' onclick=" function_nav_to('sectors')">Go to main sectors page</span>
+<button class='button' onclick="function_nav_to('')">Go to main  page</span>
 
 
 

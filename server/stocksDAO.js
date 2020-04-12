@@ -86,12 +86,15 @@ class stocksDAO {
     }
 
     remove_stock(stock_name,stock_symbol,stock_sector) {
-         console.log("YYY:",stock_name,stock_symbol,stock_sector);
         return  db.findOneAndDelete({
             Name: stock_name,
             Symbol: stock_symbol,
             Sector: stock_sector
         })
+        // return  db.remove({
+        //     Name: null
+        // })
+
 
     }
 
@@ -118,7 +121,9 @@ class stocksDAO {
 
     }
 
-
+    create_index() {
+        return db.createIndex( {'Name' :1 } )
+    }
 
 }
 

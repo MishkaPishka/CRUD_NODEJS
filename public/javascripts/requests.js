@@ -1,16 +1,10 @@
-$(document).ready(function(){
-
-    // jQuery methods go here...
-
-
-});
-
+//General functions for requests
 function clicked_search_button(){
         $("#not_found")[0].style.visibility = 'hidden';
 
         var search_value = $("#search_input").val();
         if (search_value==='') {
-            console.log('z');
+            console.log('Empty search field');
             return ;
         }
         var client = new HttpClient();
