@@ -11,7 +11,7 @@ let pp = path.resolve(__dirname, '../../data/DB');
 let stocksService = require('../services/stocks_service');
 let sectorsService = require('../services/sector_service');
 
-let stock = require('../Stock');
+let Stock = require('../Stock');
 let sector = require('../Sector');
 
 
@@ -21,18 +21,17 @@ router.get('/', function(req, res) {
 
     var sectors_dictionary = null;
     var stocks = null;
-    return Promise.all([sectorsService.get_sectors_by_name(), stocksService.get_list_all()])
+    return Promise.all([sectorsService.get_sectors_by_name(), stocksService.get_top_i_by_name(10),stocksService.get_random_stock()])
         .then(values => {
                 sectors_dictionary = values[0];
                 stocks = values[1];
                 console.log(sectors_dictionary);
                 console.log(stocks);
-                console.log("****");
                 return res.render('index', {
                         title: 'Stocks and Stuff!',
                         stocks: stocks,
                         sectors_dictionary: sectors_dictionary,
-                        featured: null
+                        featured: values[2][0]
                     }
                 );
             }
@@ -40,13 +39,47 @@ router.get('/', function(req, res) {
 });
 
 
+router.get('/search/:name', function (req,res) {
+    console.log("AA");
+    return new Promise( (resolve, reject) =>  {
+
+        let name = req.params.name;
 
 
 
+        stocksService.get_stock_by_name(name)
+            .then (data =>{
+                console.log("search result in server:",data);
+                resolve(res.send(data));
+
+                // resolve(res.redirect("/www"));
+
+
+            })
+            .catch (err =>{reject(err)} );
+
+    });
+
+})
 
 
 
+router.get('/filter/:name', function(req, res) {
+    return new Promise( (resolve, reject) =>  {
 
+        let name = req.params.name;
+        let size_stocks_arr = 10;
+        stocksService.get_top_i_by_field(size_stocks_arr,name)
+            .then (data => {
+                console.log(data);
+                resolve(res.send(data));
+
+            })
+            .catch (err =>{reject(err)} );
+
+    });
+
+});
 
 
 

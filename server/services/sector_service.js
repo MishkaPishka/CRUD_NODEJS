@@ -17,6 +17,7 @@ class SectorsService {
         })
 }
 
+
     get_stocks_by_sector(sector) {
         let sector_name = sector.sector_name;
         return new Promise((resolve, reject) => {

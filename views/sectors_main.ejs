@@ -6,10 +6,51 @@
     <title>Sectors Main Page</title>
 </head>
 <body>
+
+<script>
+
+function insert_sector() {
+    let x = $("#insert_sector_name")[0].value;
+    console.log(x);
+
+}
+    window.addEventListener("load", function() {
+
+    $("#insert_sector_btn")[0].onclick = function() { insert_sector(); };
+
+
+
+} );
+
+    var sectors = <%-JSON.stringify(sectors)%>;
+    var num_sector = sectors.length;
+    let bla = null;
+    // $(function() {
+    //     $('#stocks').click(function (){
+    //         window.location.href='../stocks'
+    //     })
+    //
+    //     $('#bla').append(`This is sector length ${num_sector}`)
+    //     $('#energy').on('click', function(e){
+    //         $.get('/sectors/Energy')
+    //             .done(data=>{
+    //                 console.log(data)
+    //                  bla = data
+    //                 //let htmlString = '<table>'
+    //                 let stringTable ='';
+    //                 data.forEach(entry => {
+    //
+    //                      stringTable += `<tr> <td>${entry.Symbol}</td> <td>${entry.Name}</td> <td>${entry.Sector}</td></tr>`
+    //                 })
+    //                 $('#data').append(stringTable);
+    //             }).fail(err => console.log(err))
+    //     })
+    // })
+</script>
+
 <h1>Main Sectors Page</h1>
 <%if (sectors != null) { %>
-    <% var num_sectors =  sectors.length%>
-
+<!--    <% var num_sectors =  sectors.length%>-->
     <span>Total Number of Sectors: <%=num_sectors%> </span>
     <ul class="sectors">
         <% for(var i=0; i < sectors.length; i++) {%>
@@ -21,18 +62,20 @@
     </ul>
 <% } %>
 
+    <input id="insert_sector"  type="text" placeholder="value" name="sector">
+    <button id="delete_sector" >Delete Sector BTN</button>
+    <button id="insert_sector_btn" >Insert Sector BTN</button>
 
-<span> <a href ='/stocks' > Go to main stocks page</a></span>
+        <span> <a id="stocks">Go to main stocks page</a></span>
+
+<h2 id="bla"> </h2>
+<a id="energy">Energy</a>
+<div id="data"></div>
 
 <br>
 
 <span> <a href ='/' > Go to main  page </a></span>
 
-
-<form class ='insert sector' action="/sectors/" method="Post">
-    <input type="text" placeholder="sector name" name="name">
-    <button type="submit">Insert sector</button>
-</form>
 
 
 

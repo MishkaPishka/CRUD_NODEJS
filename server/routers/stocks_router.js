@@ -3,11 +3,12 @@ var router = express.Router();
 var path = require('path');
 
 
-let stocksDAO = require('../stocksDAO');
+// let stocksDAO = require('../stocksDAO');
+let stocksService = require('../services/stocks_service');
 
 
 
-let stock = require('../Stock');
+let Stock = require('../Stock');
 let sector = require('../Sector');
 
 
@@ -18,16 +19,21 @@ router.get('/', function(req, res) {
 
 
     return new Promise((resolve, reject) => {
-
         let stocks = null;
-        stocksDAO.get_list_all()
+        stocksService.get_list_all()
             .then(data => {
-                console.log("after list all companies");
                 console.log(data);
                 stocks = data;
-                resolve(   res.render('stocks_main', { stocks: stocks}));
-            })
-    }).catch(err => reject(err))
+                //HERE
+                let sectors = []
+                stocks.forEach(entry => {
+
+                    if (false==sectors.includes(entry['Sector'])) { sectors.push(entry['Sector'])}
+
+                })
+                resolve(   res.render('stocks_main', { stocks: stocks.slice(0,10),sectors:sectors}));
+            }).catch(err => reject(err))
+    })
 
 });
 
@@ -39,45 +45,120 @@ router.get('/', function(req, res) {
 // });
 
 
+router.post('/insert/',function (req,res) {
+    return new Promise ( (resolve, reject) => {
+        console.log('insert - in router -',req.body.Name,req.body.Symbol,req.body.Sector);
+        let stock_to_insert  = new Stock(req.body.Name,req.body.Symbol,req.body.Sector);
+        stocksService.add_stock(stock_to_insert)
+            .then( data=>{
+                console.log("valid resolve for pose:",data);
+                    return resolve(res.send(data))
+                }
+            ).catch(err=>{   console.log("error: in insert ",err); return reject(res.status(500).send(err));})
+    })
+});;//END post /insert
 
-//insert stock
-router.post('/insert', function(req, res) {
-    console.log("post - in insert");
 
+router.post('/update',function (req,res) {
+    return new Promise ( (resolve, reject) => {
+        let stock_name = req.body.name;
+        let stock_field= req.body.field;
+        let field_value= req.body.field_value;
+        let stock_data = {}
+        stock_data['field'] = stock_field
+
+        stock_data[stock_field] = field_value
+        console.log('update stock:',stock_name,stock_data);
+        stocksService.update_stock(stock_name,stock_data)
+            .then( data=>{
+                // console.log('aaa',data.stock,"ccc")
+                return resolve(res.send(data.stock));
+                 // resolve( res.render('stock', {stock:data.stock}));
+
+
+                    // return resolve(res.render(data.stock))
+                }
+            ).catch(err=>{   console.log("error in  ",err); return reject(res.status(500).send(err));})
+    })
+});;//END name/update
+
+router.post('/delete', function(req, res) {
 
     return new Promise((resolve, reject) => {
-        let symbol = req.body.symbol;
         let name = req.body.name;
-        let sector = req.body.sector;
-        console.log("insert: " + symbol, name, sector);
-        let stock = new Stock(name, symbol, sector);
-        //INSERT TO DAB
-        console.log("search for: " + req.body.name);
-        stocksDAO.add_stock(stock)
-            .then(data => {
-                console.log('add stock:'+ data);
-                if (stock == null) reject('no such stock');
-                else resolve(res.redirect('/stocks/' + stock.name));
-            })
-    }).catch(err => console.log(err));
-});
+        console.log("router delete: ", name);
+        stocksService.remove_stock(name).then(data => {
+            console.log("post delete result:",data);
+                return resolve(res.send(data));
+            }
+        ).catch(err => {
+            console.log('router post delete error:',err);
+            return reject(res.status(500).send(err))
+        });
 
-/* GET users listing. */
+    });
+});//END post /delete
+
+router.post('/update', function(req, res) {
+
+    return new Promise((resolve, reject) => {
+        let name = req.body.name;
+        let field = req.body.field;
+        let value = req.body.value;
+        let update_data = {}
+        let data_field =field;
+        update_data[data_field] =value;
+        console.log("router update: ", name,' ',update_data);
+        stocksService.update_stock(name,update_data).then(data => {
+                console.log("updated result:",data);
+                return resolve(res.send(data));
+            }
+        ).catch(err => {
+            return reject(res.status(500).send(err))
+        });
+
+    });
+});//END post /delete
+
+/* STOCKS PAGE . */
 router.get('/:name', function(req, res) {
     let name = req.params.name;
-    console.log('get name;'+name);
-
     return new Promise( (resolve, reject) => {
         let stock = null;
-        stocksDAO.get_stock_by_name(name)
-
+        stocksService.get_stock_by_name(name)
             .then(data => {
+                if (data ==null) {
+                    throw {err:'no such stock'};
+                }
                 stock = data;
+                delete stock["_id"];
                 resolve( res.render('stock', {stock: stock}));
 
-            })
-    }).catch(err => console.log(err));
+            }).catch(err =>{ console.log(err); return reject(res.send(err));});
+    })
 });
 
 
+router.get('/search/:name', function (req,res) {
+    return new Promise( (resolve, reject) =>  {
+
+        let name = req.params.name;
+
+
+        console.log("search result in server:",name);
+
+        stocksService.get_stock_by_name(name)
+            .then (data =>{
+                console.log("search result in server:",data);
+                resolve(res.send(data));
+
+                // resolve(res.redirect("/www"));
+
+
+            })
+            .catch (err =>{reject(err)} );
+
+    });
+
+});
 module.exports = router;

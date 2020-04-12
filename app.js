@@ -53,7 +53,9 @@ app.use('/stocks', stocksRouter);
 
 // catch 404 and forward to error.ejs handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  res.status(404).send("Sorry can't find that!")
+
+  // next(createError(404));
 });
 
 // error.ejs handler

@@ -30,22 +30,16 @@ router.get('/', function(req, res) {
 
 /* GET /sectors/XXX. */
 router.get('/:name', function(req, res, next) {
-
-
     return new Promise( (resolve, reject) => {
         let name = req.params.name;
-        console.log('name: '+name);
         let sector = new Sector(name);
         let stocks_by_sector =null;
         sectorsService.get_stocks_by_sector(sector)
             .then(data => {
-                stocks_by_sector = data;
-                resolve( res.render('sector', {sector: sector, stocks_by_sector: stocks_by_sector}));
+                return resolve(res.render('sector', {sector:name,stocks_by_sector: data,sectorData:{NumberOfScotks:0,PriceAVG:0,AVGMARKETCUP:0}}));
 
-            })
-    }).catch(err => console.log(err));
-
-
+            }).catch(err => {return reject(res.status(500).send(err))});
+    })
 });
 
 

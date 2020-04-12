@@ -1,0 +1,6 @@
+Where do you handle all of the exception messages - in router - service ?
+
+How to do the thing where you just write - prom and it completes it ?
+
+
+When passing stuff like "price/book" the router does't get it's ..
