@@ -1,3 +1,4 @@
+/*
 const MongoClient = require('mongodb').MongoClient;
 class DB {
 
@@ -22,6 +23,4 @@ class DB {
     }
 }
 
-
-
-module.exports = new DB();
+module.exports = new DB();*/

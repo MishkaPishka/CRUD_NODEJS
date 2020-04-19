@@ -2,21 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-        <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            let sector = <%-JSON.stringify(sector)%>;
+            console.log('sector:',sector);
+            let sector_name = sector['sector_name'];
+            let description = sector['description'];
+            let stocks =  (sector['companys'] == undefined) ? [] : sector['companys'];
+            let a = [];
+            let avg_data =  <%-(JSON.stringify(sector_data)==undefined ) ? ['a'] : JSON.stringify(sector_data)%>;
+            console.log('avg_data',avg_data);
 
-        <title>Sector Page:  <%= sector%> </title>
+            let avg_price = avg_data['price'];
+            let avg_market_cap = avg_data['market_cap'];
+            let avg_dividend_yield = avg_data['dividend_yield'];
+            let y =  JSON.parse(document.cookie);
+
+            console.log('avg_price',avg_price,' avg_price',avg_price, ' avg_market_cap',avg_market_cap,'avg_dividend_yield',avg_dividend_yield);
+        </script>
+        <script src="/javascripts/requests.js"></script>
+        <script src="/javascripts/elements.js"></script>
+
+        <script type="text/javascript" src="/javascripts/requests.js"></script>
+        <script type="text/javascript" src="/javascripts/events_parser.js"></script>
+        <script type="text/javascript" src="/javascripts/event_controller.js"></script>
+        <script type="text/javascript" src="/javascripts/pages/sector_loader.js"></script>
+        <p id="error"></p>
+        <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+        <title><%=sector['sector_name']%></title>
 </head>
+
 <body>
 
 
-<h1> Sector Page - <%= sector%> </h1>
+    <h1 id="sector_title"> </h1>
+    <div id="sector_description" style="width:30%; padding:10px;" >
 
-    <table   class ='table_heads_sector_data'>
-        <h2>Sector: <%= sector.name%> - Info Page</h2>
-
-
+    </div>
 
 
+
+
+
+
+
+
+
+        <table   class ='table_heads_stocks' style="margin-bottom:10px;">
 
         <thead >
             <tr >
@@ -27,100 +59,50 @@
         </thead>
 
 
-
-
         <tbody >
 
-            <%  Object.keys(sectorData).forEach(function (key) { %>
-            <tr >
-                <td   class ='table_heads_sector_data'><%=key%></th>
-                <td  class ='table_heads_sector_data' ><%= sectorData[key] %></td>
-            </tr>
-            <% }) %>
+
 
 
         </tbody>
 
 
     </table>
-    <input id="sector_description"  type="text" placeholder="value" name="sector_description">
+
+
+    <input id="sector_description_input"  type="text" placeholder="value" name="sector_description">
         <button id="add_sector_description" >Update Sector Description</button>
-
-        <input id="remove_stock"  type="text" placeholder="value" name="remove_stock_name">
-            <button id="remove_stock_btn" >Remove Stock</button>
-            <br>
-            <input id="add_stock"  type="text" placeholder="value" name="add_stock_name">
-                <button id="add_stock_btn" >Add Stock</button>
+        <br>
+            <input id="remove_stock_input"  type="text" placeholder="value" name="remove_stock_name">
+                <button id="remove_stock_btn" >Remove Stock</button>
                 <br>
-                <input id="sector_description"  type="text" placeholder="value" name="sector_description">
-                    <button id="add_sector_description" >Update Sector Description</button>
-                    <br>
+                    <input id="add_stock_input"  type="text" placeholder="value" name="add_stock_name">
+                        <button id="add_stock_btn" >Add Stock</button>
+                        <br>
+                        <p id="msg"></p>
 
 
-                    <span style='padding-right:10%;'> <a href ='/sectors' > Go to main sectors page</a></span>
+                        <div id="stocks_list">
 
+    </div>
 
-                        <span> <a href ='/' > Go to main  page </a></span>
-
-                <%if (stocks_by_sector != null) { %>
-
-
-
-                        <table class="stocks_table" style="background-color:beige;padding:10px;">
-                            <h2>Top 10 Stocks</h2>
-
-                            <p> Sort Stocks:</p>
-                            <select id="select_filter">
-                                <option value="o_name_filter">Name</option>
-                                <option value="o_expensive_filter">Most Expensive</option>
-                                <option value="o_cheap_filter">Most Cheap</option>
-                                <option value="o_market_cap_high">Market Cap - High</option>
-                                <option value="o_market_cap_low">Market Cap - LOW</option>
+                            <div style="padding-top:25px">
+                                <div style="width:800px;">
+                                    <div style="width:300px; float:left;">
+                                        <button id='main' class='button' type="submit" method="GET">Go to main  page</button>
 
 
 
 
-                            </select>
-
-                            <thead >
-                                <tr >
-
-                                    <th class ='table_heads'>Name</th>
-                                    <th class ='table_heads' >Symbol</th>
-                                    <th class ='table_heads' >Sector</th>
-                                </tr>
-                            </thead>
-
-                            <tbody class ="stock_table_body ">
-
-
-                                <% for(var i=0; i < stocks_by_sector.length && i<5; i++) {%>
-                                <tr class="rows_stocks">
-                                    <td ><a href ='/stocks/<%= stocks_by_sector[i].Name %>' ><%= stocks_by_sector[i].Name %></a></td>
-                                    <td><a href ='/stocks/<%= stocks_by_sector[i].Name %>' ><%= stocks_by_sector[i].Symbol %></a></td>
-                                    <td><a href ='/sectors/<%= stocks_by_sector[i].Sector %>' ><%= stocks_by_sector[i].Sector %></a></td>
-                                </tr>
-                                <% } %>
-                            </tbody>
-
-
-                        </table>
-
-                        <span >
-                            <button id='search_btn' class='button' type="submit">Search Stock By Name</button>
-                            <br>
-
-                                <input  id='search_input' type="text" placeholder="name" name="name">
-
-                                    <span id="not_found" >Not Found</span>
-
-                        </span>
-
-    <% } %>
 
 
 
-
+                                    </div>
+                                    <div style="width:300px; float:right;">
+                                        <button id='main_sectors' class='button' type="submit">Go to main sectors page</button>
+                                    </div>
+                                </div>
+                            </div>
 
 </body>
 </html>

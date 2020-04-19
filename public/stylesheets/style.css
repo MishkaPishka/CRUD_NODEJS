@@ -6,11 +6,15 @@ body {
 a {
   color: #00B7FF;
 }
-
+.thWidth {
+    width:250px;
+}
 .rows_stocks {
     background-color: lavender;
     border-style: dot-dash;
     border-color: azure;
+
+
 }
   .stocks  {
       float:left;
@@ -26,6 +30,8 @@ a {
       border-color: green;
       border-style: dot-dash;
       width: 33%;
+      /*width: 250px;*/
+      height:20px;
   }
 
 .divScroll {
@@ -78,3 +84,7 @@ a {
 }
 .top10FilterValue { padding-bottom: 10px; background-color: deepskyblue; color: black; display: block; position:relative;width:5%;border-color: beige;}
 .top10FilterValueHidden{  display: none;}
+
+.inner {
+    position: absolute;
+}

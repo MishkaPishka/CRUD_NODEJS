@@ -1,105 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        let stocks = <%-JSON.stringify(stocks)%>;
+        let sectors = <%-JSON.stringify(sectors)%>;
+        let map = new Map();
+        sectors.forEach(value => { map[value]=value;})
+        console.log(map);
+        sectors = map;
+
+    </script>
     <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/javascripts/requests.js"></script>
+        <script type="text/javascript" src="/javascripts/elements.js"></script>
 
-    <meta charset="UTF-8">
+        <script type="text/javascript" src="/javascripts/requests.js"></script>
+        <script type="text/javascript" src="/javascripts/events_parser.js"></script>
+        <script type="text/javascript" src="/javascripts/event_controller.js"></script>
+
+        <script type="text/javascript" src="/javascripts/pages/stocks_loader.js"></script>
+
+
+        <meta charset="UTF-8">
     <title>Stocks Main Page</title>
 </head>
 <body>
     <script>
-        //Behavior after delete function
-        function remove_call_back(delete_result) {
-            console.log('in remove_call_back:',delete_result);
-            if (delete_result.err == 'True'){
-                console.log(delete_result,"FAIL");
-                $("#stock_delete_errr")[0].innerHTML = "<span >"+delete_result.msg+"</span>";
-            }
-            else {
-            $("#stock_delete_errr")[0].innerHTML = "Deleted:"+delete_result.msg.value.Name;
-
-            }
-
-        }
-        //parse parameters before init function
-        function remove_stock() {
-            let stock_to_remove = $("#remove_stock_name")[0].value;
-            $("#stock_delete_errr")[0].innerHTML = "";
-            return remove_stock_request(stock_to_remove,remove_call_back);
-
-        }
 
 
 
 
 
 
-
-    //Parse input
-        //Call server
-        //notify on error or redirect to new page
-    function insert_stock() {
-        let stock_name = $("#insert_name")[0].value;
-        let stock_symbol = $("#insert_symbol")[0].value;
-        let stock_sector = $("#insertSector")[0].value;
-        try {
-
-            if(stock_name == null || stock_name.length==0 || stock_symbol == null || stock_symbol.length==0  )
-                {
-                    throw {msg:"missing name or something"};
-                 }
-        }
-        catch(error) {
-                $("#stock_insert_errr")[0].innerHTML = "<span >"+error.msg+"</span>";
-                return;
-        }
-        console.log('insert stock',stock_name,stock_symbol,stock_sector);
-
-
-        let stock_json_description = {Name: stock_name, Sector: stock_sector, Symbol:stock_symbol};
-
-        $.post('/stocks/insert',stock_json_description)
-
-        .done(data=>
-            {
-        if (data['valid']==false){
-        $("#stock_insert_errr")[0].innerHTML = "<span >error, returned:"+data+"</span>";
-        console.log('returned false');
-        return
-    }
-        //Relocate to new page - was supposed to be different
-        window.location.href='../stocks/'+data.name;
-
-
-
-
-            })
-        .fail(err =>
-            {
-                console.log('error insert:',err);
-
-
-            }
-        );//fail
-        console.log('end function:insert_stock');
-    }//end function insert_stock
-
-
-        window.addEventListener("load", function() {
-
-
-        $("#select_filter")[0].onchange = function() {
-        console.log($("#select_filter")[0].value);function_sort($("#select_filter")[0].value);
-    };
-        $("#search_btn")[0].onclick = function() {
-        clicked_search_button();};
-        $("#insert_stock_btn")[0].onclick = function() { insert_stock(); };
-        $("#not_found")[0].style.visibility = 'hidden';
-
-
-    } );
 
 </script>
 <h1>Stocks Main Page</h1>
@@ -111,22 +43,16 @@
             <input id="insert_symbol"   type="text" placeholder="stock symbol" name="symbol">
 
                 <select id="insertSector">
-                    <!--<script>console.log ('<%- sectors %>')</script>-->
                     <option value="none" selected disabled hidden>Select Sector </option>
-                    <%  Object.keys(sectors).forEach(function (key) { %>
-                    <option value="<%=sectors[key]%>"><%=sectors[key]%></option>
-
-                    <% }) %>
-
-
-
 
                 </select>
+
                     <button id="insert_stock_btn" type="submit">Insert Stock</button>
-                <p id="stock_insert_errr"></p>
+                <p id="error"></p>
                     <br>
+
         <input id="remove_stock_name" type="text" placeholder="stock name" name="name">
-            <button onclick='remove_stock()' type="submit">Remove Stock</button>
+            <button id='remove_stock_btn' onclick='remove_stock()' type="submit">Remove Stock</button>
             <span id="delete_msg_status" > </span>
             <p id="stock_delete_errr"></p>
 
@@ -135,70 +61,61 @@
     <span >
 
 
-    </span>
 
-    <%if (stocks != null) { %>
-    <br>
 
-    <h2 style="padding-left:50%;margin-bottom: 20px;">TOP 10 STOCKS</h2>
-        <table class="stocks_table" style="background-color:beige;padding:10px;">
-            <h2>Top 10 Stocks</h2>
-            <button id='search_btn' class='button' type="submit">Search Stock By Name</button>
-            <br>
 
-                <input  id='search_input' type="text" placeholder="name" name="name">
-                    <span id="not_found" >Not Found</span>
-            <p> Sort Stocks:</p>
-        <select id="select_filter">
+        <table class="stocks_table" style="background-color:beige;padding:10px;;height=200px;">
+            <h2 style="padding-left:20%;">All Stocks</h2>
 
-        <%  Object.keys(stocks[0]).forEach(function (key) { %>
-        <option value="<%=key%>"><%=key%></option>
-
-        <% }) %>
+        <select id="sort_by">
+            <option value="none" selected disabled hidden>Sort By </option>
 
 
 
         </select>
-
+            <table>
             <thead >
-                <tr >
+                <tr  >
 
-                    <th class ='table_heads'>Name</th>
-                    <th class ='table_heads' >Symbol</th>
-                    <th class ='table_heads' >Sector</th>
+                    <th class ='table_heads' style="width:250px;height:50px;" >Name</th>
+                    <th class ='table_heads'  >Symbol</th>
+                    <th class ='table_heads'  >Sector</th>
                 </tr>
             </thead>
+    </table>
 
-            <tbody class ="stock_table_body">
+        <div style="overflow:auto;width:750px;height:450px;">
+            <table>
 
-
-                <% for(var i=0; i < stocks.length ; i++) {%>
-                <tr class="rows_stocks">
-                    <td ><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Name %></a></td>
-                    <td><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Symbol %></a></td>
-                    <td><a href ='/sectors/<%= stocks[i].Sector %>' ><%= stocks[i].Sector %></a></td>
-                </tr>
-                <% } %>
-            </tbody>
+                <tbody class ="stock_table_body" >
 
 
-        </table>
+                </tbody>
 
 
-    <!--<% for(var i=0; i < stocks.length ; i++) {%>-->
-    <!--        <li class="stock">-->
-    <!--            <span><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Name %></a></span>-->
-    <!--            <span><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Symbol %></a></span>-->
-    <!--            <span><a href ='/sectors/<%= stocks[i].Sector %>' ><%= stocks[i].Sector %></a></span>-->
+            </table>
 
-    <!--        </li>-->
-    <!--    <% } %>-->
-    <!--</ul>-->
-<!--<% } %>-->
+        </div>
+
+        <div style="padding-left:20%;">
+            <span >
+                <button id='search_btn' class='button'  searchType='Name' type="submit">Search Stock By Name</button>
+                <br>
+                <input  id='search_input' type="text" placeholder="name" name="name">
+
+                <span id="not_found" style="visibility:hidden" >Not Found</span>
+
+            </span>
+
+            </div>
 
 
-<button class='button' onclick=" function_nav_to('sectors')">Go to main sectors page</span>
-<button class='button' onclick="function_nav_to('')">Go to main  page</span>
+
+<div style="margin-top:5%;margin-left:15%;">
+    <button class='button' onclick=" function_nav_to('sectors')">Go to main sectors page</span>
+    <button class='button' onclick="function_nav_to('')">Go to main  page</span>
+</div>
+
 
 
 

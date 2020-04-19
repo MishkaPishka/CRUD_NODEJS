@@ -1,3 +1,4 @@
+/*
 const MongoClient = require('mongodb').MongoClient;
 class SectorsDBConnector {
 
@@ -22,4 +23,4 @@ class SectorsDBConnector {
 
 
 
-module.exports = new SectorsDBConnector();
+module.exports = new SectorsDBConnector();*/

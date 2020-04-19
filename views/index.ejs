@@ -1,93 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE 'html'>
+ <html lang="en">
 
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+
+        let sectors_names= <%- JSON.stringify(sectors_dictionary)%>;
+        let header_mapping=  <%- JSON.stringify(header_mapping)%>;
+        let featured =  <%-JSON.stringify(featured)%>;
+        document.cookie = JSON.stringify( header_mapping);
+        let stocks = <%-JSON.stringify( stocks)%>;
+        $aR = [header_mapping,sectors_names,featured];
+
+    </script>
+
+
+
+    <script type="text/javascript" src="/javascripts/event_controller.js"></script>
+    <script type="text/javascript" src="/javascripts/events_parser.js"></script>
     <script type="text/javascript" src="/javascripts/requests.js"></script>
-    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
-    <meta charset="UTF-8">
+    <script type="text/javascript" src="/javascripts/elements.js"></script>
+
+    <script type="text/javascript" src="/javascripts/pages/index.js"></script>
+    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css"></link>
+    <meta charset="UTF-8"></meta>
+
     <title>Title</title>
 </head>
 <body>
 
-<script>
-
-
-
-
-
-    $(document).ready(function(){
-
-    // jQuery methods go here...
-    $("#main_sectors")[0].onclick = function() { function_nav_to('sectors');};
-    $("#main_stocks")[0].onclick = function() { function_nav_to('stocks'); };
-    $("#search_btn")[0].onclick = function() {clicked_search_button();};
-
-    $("#not_found")[0].style.visibility = 'hidden';
-
-    $("#select_filter")[0].onchange = function() {
-    console.log($("#select_filter")[0].value);function_sort($("#select_filter")[0].value);
-};
-    $("#gotostoc")[0].onclick = function () {
-    let name = $("#gotostoc")[0].innerHTML;
-    // let name = this.innerHTML;
-    let stockName = name.split('the day: ')[1];
-    function_nav_to('stocks/'+stockName);
-    };
-
-
-
-
-    });
-
-
-
-
-
-
-
-
-
-
-</script>
 <h1 style="margin-bottom:10px;"><%= title %></h1>
 <div class="featured_stock">
 
-
-    <%if (featured  != null) { %>
     <table   class ='table_heads_stocks'>
-        <h2 id="gotostoc">Featured stock of the day: <%=featured.Name%></h2>
-
-
-
-
-
-        <thead >
-            <tr >
-
-                <th class ='table_heads_stocks'>Property</th>
-                <th  class ='table_heads_stocks'  >Value</th>
-            </tr>
-        </thead>
-
-
-
-
-        <tbody >
-
-            <%  Object.keys(featured).forEach(function (key) { %>
-            <tr >
-                <td   class ='table_heads_stocks'><%=key%></th>
-                <td  class ='table_heads_stocks' ><%= featured[key] %></td>
-            </tr>
-            <% }) %>
-
-
-        </tbody>
-
+        <h2 id="gotostoc">Featured stock of the day: <%=featured.name%></h2>
 
     </table>
-    <% } %>
 
 </div>
 
@@ -110,19 +58,8 @@
 
 
 
-                <select id="select_filter">
+                <select id="sort_by">
                     <option value="none" selected disabled hidden>Sort By</option>
-                    <%  Object.keys(stocks[0]).forEach(function (key) { %>
-                        <option value="<%=key%>"><%=key%></option>
-
-                        <% }) %>
-                    // <option value="o_name_filter">Name</option>
-                    // <option value="o_expensive_filter">Most Expensive</option>
-                    // <option value="o_cheap_filter">Most Cheap</option>
-                    // <option value="o_market_cap_high">Market Cap - High</option>
-                    // <option value="o_market_cap_low">Market Cap - LOW</option>
-                    //
-
 
 
                 </select>
@@ -138,45 +75,36 @@
 
             <tbody class ="stock_table_body">
 
-
-                <% for(var i=0; i < stocks.length && i<5; i++) {%>
-                <tr class="rows_stocks">
-                    <td ><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Name %></a></td>
-                    <td><a href ='/stocks/<%= stocks[i].Name %>' ><%= stocks[i].Symbol %></a></td>
-                    <td><a href ='/sectors/<%= stocks[i].Sector %>' ><%= stocks[i].Sector %></a></td>
-                </tr>
-                <% } %>
                 </tbody>
 
 
         </table>
 
         <span >
-            <button id='search_btn' class='button' type="submit">Search Stock By Name</button>
+            <button id='search_btn' class='button'  searchType='name' type="submit">Search Stock By Name</button>
             <br>
-
                 <input  id='search_input' type="text" placeholder="name" name="name">
 
-                    <span id="not_found" >Not Found</span>
+                    <span id="not_found" style="visibility:hidden" >Not Found</span>
 
         </span>
 
-        <div >
-            <h2>SECTORS</h2>
+        <div id="sectors_list">
+            <!--<h2>SECTORS</h2>-->
 
-            <%if (sectors_dictionary  != null) { %>
-            <ul >
-                <% for(var key in sectors_dictionary) { %>
-                <li style="padding-bottom: 10px;">
-                    <span ><a href ='/sectors/<%= sectors_dictionary[key] %>' > <%= sectors_dictionary[key] %> </a></span>
-                </li>
+            <!--<ul >-->
+            <!--    <% for(var key in sectors_dictionary) { %>-->
+            <!--    <li style="padding-bottom: 10px;">-->
+            <!--        <span ><a href ='/sectors/<%= sectors_dictionary[key] %>' > <%= sectors_dictionary[key] %> </a></span>-->
+            <!--    </li>-->
 
-                <% } %>
-            </ul>
-            <% } %>
+            <!--    <% } %>-->
+            <!--</ul>-->
 
         </div>
-</div>
+        <iframe src="https://datahub.io/core/s-and-p-500/view/0" width="100%" height="475px" frameborder="0"></iframe>
+
+    </div>
 
 
 

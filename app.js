@@ -3,17 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var $ = require('jquery');
 let svn = require('svn');
 //import mongoose
 var mongoose = require(`mongoose`);
 
-var indexRouter = require('./server/routers/index_router');
-var sectorsRouter = require('./server/routers/sectors_router');
-var stocksRouter = require('./server/routers/stocks_router');
+var indexRouter = require('./server/main/routers/index_router');
+var sectorsRouter = require('./server/sectors/sectors_router');
+var stocksRouter = require('./server/stocks/stocks_router');
 
-var Stock = require(path.resolve(__dirname, './server/Stock'));
-var Sector = require(path.resolve(__dirname, './server/Sector'));
+// var Stock = require(path.resolve(__dirname, './server/Stock'));
+// var Sector = require(path.resolve(__dirname, './server/Sector'));
 
 var app = express();
 
@@ -28,10 +27,10 @@ var app = express();
 
 //LISTEN TO PORT
 
-const port = 3000;
+/*const port = 3000;
 app.listen(3000, ()=>  {
   console.log('listening on 3000');
-});
+});*/
 
 
 
