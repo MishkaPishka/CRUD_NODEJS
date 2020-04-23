@@ -8,11 +8,6 @@ var path = require('path');
 let stocks_controller = require('./stocks_controller');
 
 let Stock = require('./Stock');
-let sector = require('../sectors/Sector');
-
-const default_stock_list_length = 10;
-
-
 
 
 router.post('/insert/',function (req,res) {
@@ -20,21 +15,15 @@ router.post('/insert/',function (req,res) {
         let stock_to_insert  = new Stock(req.body.name,req.body.symbol,req.body.sector);
         stocks_controller.add_stock(stock_to_insert)
             .then( data=>{
-
                 console.log("valid resolve for pose:",data);
                     return res.send(data[0])
                 }
             ).catch(err=>{   console.log("error: in insert ",err); return (res.status(500).send(err));})
-
 });
 
 
 router.post('/update',function (req,res) {
-        let stock_name = req.body.name;
-        let stock_field= req.body.field;
-        let field_value= req.body.field_value;
-    stocks_controller.update_stock(stock_name,stock_field,field_value)
-
+    stocks_controller.update_stock( req.body.name,req.body.field, req.body.field_value)
             .then( data=>{
                  res.send(data);
              })
@@ -43,8 +32,7 @@ router.post('/update',function (req,res) {
 });//END name/update
 
 router.post('/delete', function(req, res) {
-        let name = req.body.name;
-        console.log("router delete: ", name);
+        console.log("router delete: ", req.body.name);
         stocks_controller.remove_stock(name)
             .then(data => {
             console.log("post delete result:",data);
@@ -62,29 +50,26 @@ router.post('/delete', function(req, res) {
 
 /* STOCKS PAGE . */
 router.get('/:name', function(req, res) {
-    let name = req.params.name;
-    return new Promise( (resolve, reject) => {
-        stocks_controller.get_stock_by_name(name)
+        stocks_controller.get_stock_by_name( req.params.name)
             .then(data => {
                 if (data ==null) {
                     throw {err:'no such stock'};
                 }
+                return ( res.render('stock', {stock: data}));
 
-                resolve( res.render('stock', {stock: data}));
+            }).catch(err =>{ console.log(err); return (res.send(err));});
 
-            }).catch(err =>{ console.log(err); return reject(res.send(err));});
-    })
+
 });
 router.get('/filter/:name', function(req, res) {
-    return new Promise( (resolve, reject) =>  {
         let name = req.params.name;
         stocks_controller.get_top_i_by_field(name)
             .then (data => {
-                resolve(res.send(data));
+                (res.send(data));
 
             })
-            .catch (err =>{reject(err)} );
-    });
+            .catch (err => {res.status(500).send(err) } );
+
 
 });
 
@@ -97,26 +82,18 @@ router.get('/', function(req, res) {
             console.log(stocks);
             res.render('stocks_main', { stocks: stocks,sectors:sectors});
 
-        } ).catch(err => console.log(err))
+        } ).catch (err => {res.status(500).send(err) } );
 
 });
 router.get('/search/:name', function (req,res) {
 
-        let name = req.params.name;
-
-
-        console.log("search result in server:",name);
-    stocks_controller.get_stock_by_name(name)
-
+    console.log("search result in server:",req.params.name);
+    stocks_controller.get_stock_by_name( req.params.name)
             .then (data =>{
                 console.log("search result in server:",data);
-                resolve(res.send(data));
-
-                // resolve(res.redirect("/www"));
-
-
+                res.send(data);
             })
-            .catch (err =>{reject(err)} );
+        .catch (err => {res.status(500).send(err) } );
 
 
 });

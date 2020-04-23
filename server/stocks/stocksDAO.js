@@ -6,9 +6,6 @@ let Stock = require('./Stock');
 let stocksDB = DB.db.collection('firms_data');
 
 class stocksDAO {
-    // create_index() {
-    //     stocksDB.createIndex( { "Name": 1, "Symbol": 1 }, { unique: true } )
-    // }
 
 
     update_stock(stock_name, stock_data) {

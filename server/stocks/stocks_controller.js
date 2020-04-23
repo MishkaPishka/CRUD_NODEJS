@@ -1,28 +1,33 @@
 
 
-
 let sectorsService = require('../sectors/sector_service');
 let stocksService = require('../stocks/stocks_service');
+const stock_utils = require('./stocks_utils/stocks_utils')
 
 class StocksController {
+    search_stock_by_query(query) {
+        return stocksService.search_stock_by_query(query);
+    }
     update_stock(stock_name, stock_field, stock_value) {
-        return new Promise((resolve, reject) => {
-            if (stock_field == 'sector') {
-                let err = 'cannot change sector from stock page';
-                return reject(err);
-            } else if (stock_field =='undefined'||stock_field =='none') {
-                let err = 'cannot change undefined field';
-                return reject(err);
+            let [_stock_field,_stock_value,err_msg] = stock_utils.parse_update_request(stock_field,stock_value);
+            if (err_msg != '') {
+                console.log('parse error')
+                return (err_msg);
             }
-            else{
-                return resolve(stocksService.update_stock(stock_name, stock_field, stock_value));
-            }
+            return stocksService.update_stock(stock_name, _stock_field, _stock_value)
 
-        })
+
+
+
+
     };
+
+    get_random_stock() {
+        return stocksService.get_random_stock();
+    }
     get_stocks_by_sector(sector) {}
-    get_top_i_by_field(name) {
-        return stocksService.get_top_i_by_field(name)
+    get_top_i_by_field(name,count) {
+        return stocksService.get_top_i_by_field(name,count)
 
     }
 
@@ -44,13 +49,19 @@ class StocksController {
 
 
     }
-    search_stock_by_query(query) {}
     get_list_all() {
         return stocksService.get_list_all();
     }
 
     get_names_sectors() {
         return sectorsService.get_names_sectors();
+    }
+
+    fields_to_header_mapping() {
+        return stock_utils.header_to_mapping();
+    }
+    get_top_i_by_name(i) {
+        return stocksService.get_top_i_by_name(i);
     }
 }
 

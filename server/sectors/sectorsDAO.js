@@ -4,11 +4,6 @@
 const DB = require('../data/DB')
 let sectorsDB = DB.db.collection('sectors');
 
-// sectorsDB.createIndex( { "sector_name": 1 }, { unique: true } )
-//db.getCollection('companys').distinct('Sector').forEach(doc => db.getCollection('sectors').insert({sector_name:doc}))
-
-// db.getCollection('sectors').update({"sector_name":data['Sector']},{$push: {"companys":data['Name']}})
-//add fields
 
 class sectorsDAO {
 
@@ -22,7 +17,7 @@ class sectorsDAO {
     }
 
     get_sector(sector_query) {
-        return sectorsDB.findOne(sector_query, {projection: {_id: 0}});
+        return sectorsDB.findOne(sector_query, {_id: 0});
     }
 
     get_stocks_by_sector(sector_name) {
@@ -55,7 +50,7 @@ class sectorsDAO {
     add_stock_to_sector(sector, stock) {
         return sectorsDB.update(
             {sector_name: sector},
-            {$push: {companys: stock} }
+            {$addToSet: {companys: stock} }
         )
 
     }

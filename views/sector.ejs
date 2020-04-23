@@ -3,36 +3,42 @@
 <head>
     <meta charset="UTF-8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script>
-            let sector = <%-JSON.stringify(sector)%>;
-            console.log('sector:',sector);
-            let sector_name = sector['sector_name'];
-            let description = sector['description'];
-            let stocks =  (sector['companys'] == undefined) ? [] : sector['companys'];
-            let a = [];
-            let avg_data =  <%-(JSON.stringify(sector_data)==undefined ) ? ['a'] : JSON.stringify(sector_data)%>;
-            console.log('avg_data',avg_data);
 
-            let avg_price = avg_data['price'];
-            let avg_market_cap = avg_data['market_cap'];
-            let avg_dividend_yield = avg_data['dividend_yield'];
-            let y =  JSON.parse(document.cookie);
-
-            console.log('avg_price',avg_price,' avg_price',avg_price, ' avg_market_cap',avg_market_cap,'avg_dividend_yield',avg_dividend_yield);
-        </script>
         <script src="/javascripts/requests.js"></script>
-        <script src="/javascripts/elements.js"></script>
+        <script src="/javascripts/display_elements.js"></script>
 
         <script type="text/javascript" src="/javascripts/requests.js"></script>
         <script type="text/javascript" src="/javascripts/events_parser.js"></script>
         <script type="text/javascript" src="/javascripts/event_controller.js"></script>
-        <script type="text/javascript" src="/javascripts/pages/sector_loader.js"></script>
-        <p id="error"></p>
+        <script type="text/javascript" src="/javascripts/pages/SectorView.js"></script>
         <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+            <script>
+                let sector = <%-JSON.stringify(sector)%>;
+                console.log('sector:',sector);
+                let sector_name = sector['sector_name'];
+                let description = sector['description'];
+                let stocks =  (sector['companys'] == undefined) ? [] : sector['companys'];
+                let a = [];
+                let avg_data =  <%-(JSON.stringify(sector_data)==undefined ) ? ['a'] : JSON.stringify(sector_data)%>;
+                console.log('avg_data',avg_data);
+
+                let avg_price = avg_data['price'];
+                let avg_market_cap = avg_data['market_cap'];
+                let avg_dividend_yield = avg_data['dividend_yield'];
+                let y =  JSON.parse(document.cookie);
+                $(function(){
+                    let sss = new SectorView(sector_name , description ,stocks ,avg_data, y);
+
+                sss.init();
+                console.log('avg_price',avg_price,' avg_price',avg_price, ' avg_market_cap',avg_market_cap,'avg_dividend_yield',avg_dividend_yield);
+            })
+            </script>
+
         <title><%=sector['sector_name']%></title>
 </head>
 
 <body>
+    <p id="error"></p>
 
 
     <h1 id="sector_title"> </h1>

@@ -46,6 +46,7 @@ router.post('/update',function (req,res) {
     console.log('    sectors_controller.update_sector( )',req.body.name,req.body.field,req.body.field_value)
     sectors_controller.update_sector( req.body.name,req.body.field,req.body.field_value)
         .then( data=>{
+
             delete(data['value']['_id']);
             res.send(data['value']);
         })

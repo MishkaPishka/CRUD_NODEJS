@@ -20,7 +20,6 @@ class SectorsService {
             sectorsDAObject.get_sector({"sector_name":name})
                 .then(data=> {
                     console.log('service - get_sector_by_name.',data);
-
                     return resolve(data);
                 })
                 .catch(err => {return reject(err)})

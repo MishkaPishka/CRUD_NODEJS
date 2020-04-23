@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
         <title><%=stock.name%></title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-
-
-        <script type="text/javascript" src="/javascripts/elements.js"></script>
-
+        <script type="text/javascript" src="/javascripts/display_elements.js"></script>
         <script type="text/javascript" src="/javascripts/requests.js"></script>
         <script type="text/javascript" src="/javascripts/events_parser.js"></script>
         <script type="text/javascript" src="/javascripts/event_controller.js"></script>
         <script type="text/javascript" src="/javascripts/pages/stock_loader.js"></script>
+        <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
 
         <script>
-            let st = <%- JSON.stringify(stock) %>
-            let sector = st['sector'];
-            let y =  JSON.parse(document.cookie);
-            console.log(y);
+
+            $(function(){
+                let st = <%- JSON.stringify(stock) %>
+                let sector = st['sector'];
+                let stock_fields =  JSON.parse(document.cookie);
+                let stockView = new StockView (st,stock_fields,sector);
+                stockView.init();
+        })
         </script>
 
-        <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
@@ -34,19 +34,19 @@
 
 
     <span >
-        <header   style="width:50%;text-align:center;"  >
+        <header   style="width:30%;text-align:center;"  >
             <h2>Update Stock </h2><p id="error"></p>
         </header>
    <section>
 
 
-   <select id ='stock_fields_select'>
+   <select id ='stock_fields_select' class ='select_css'>
        <option value="none" selected disabled hidden>Select Field </option>
 
    </select >
 
-       <input id="update_stock_value"  type="text" placeholder="value" name="sector">
-           <button id="update_stock_btn" >Update Stock Stock</button>
+       <input id="update_stock_value"  class="input_field" type="text" placeholder="value" name="sector">
+           <button id="update_stock_btn" class="button2" >Update Stock Stock</button>
             <p id ="error"></p>
 
    </section>
@@ -54,14 +54,14 @@
 
     </span>
 
-<div style="padding:10%;">
+    <button id='main' class='button'  type="submit" method="GET">Go to main  page</button>
 
-
-
-    <button id='main' class='button' type="submit" method="GET">Go to main  page</button>
-
-    <button id='main_stocks' class='button' type="submit">Go to main stocks page</button>
+    <button id='main_stocks' class='button'  type="submit">Go to main stocks page</button>
     <button id='go_sector' class='button' type="submit">Go to sector </button>
+<div>
+
+
+
 
 
 </div>

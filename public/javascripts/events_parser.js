@@ -40,7 +40,7 @@ function parse_remove_stock() {
 function parse_update() {
     let stock_name = $(document).attr('title');
     let value = $("#update_stock_value")[0].value
-    let field_name = $("#stock_fields_select")[0].value
+    let field_name = $("#stock_fields_select").val()
     console.log('init_update_stock',stock_name,field_name,value);
     return [stock_name,field_name,value];
 }

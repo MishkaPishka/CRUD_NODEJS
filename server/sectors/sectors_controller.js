@@ -31,10 +31,9 @@ class SectorsController {
                                 .then(values => {
                                     return resolve(values[0]);
                                 }).catch(err => {
-                                console.log('err - sectors controller - add_stock_to_sector',err);
-                                return reject(err);
-
-                            })
+                                    console.log('err - sectors controller - add_stock_to_sector',err);
+                                    return reject(err);
+                                })
                         }
                         else {
                             console.log('err - sectors controller - add_stock_to_sector - stock is already assigned');

@@ -1,18 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        let stocks = <%-JSON.stringify(stocks)%>;
-        let sectors = <%-JSON.stringify(sectors)%>;
-        let map = new Map();
-        sectors.forEach(value => { map[value]=value;})
-        console.log(map);
-        sectors = map;
 
-    </script>
     <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/javascripts/elements.js"></script>
+        <script type="text/javascript" src="/javascripts/display_elements.js"></script>
 
         <script type="text/javascript" src="/javascripts/requests.js"></script>
         <script type="text/javascript" src="/javascripts/events_parser.js"></script>
@@ -20,7 +12,20 @@
 
         <script type="text/javascript" src="/javascripts/pages/stocks_loader.js"></script>
 
-
+        <script>
+            let stocks = <%-JSON.stringify(stocks)%>;
+            let sectors = <%-JSON.stringify(sectors)%>;
+            let map = new Map();
+            sectors.forEach(value => { map[value]=value;})
+            console.log(map);
+            sectors = map;
+            let stocks_fields = document.cookie;
+            stocks_fields = JSON.parse(stocks_fields);
+            $(function(){
+                let stocksView = new StocksView(stocks_fields,sectors,stocks);
+                stocksView.init();
+        })
+        </script>
         <meta charset="UTF-8">
     <title>Stocks Main Page</title>
 </head>
@@ -39,20 +44,20 @@
 
 
     <span>
-        <input id="insert_name" type="text" placeholder="stock name" name="name">
-            <input id="insert_symbol"   type="text" placeholder="stock symbol" name="symbol">
+        <input id="insert_name" class="input_field" type="text" placeholder="stock name" name="name">
+            <input id="insert_symbol"   class="input_field" type="text" placeholder="stock symbol" name="symbol">
 
-                <select id="insertSector">
+                <select id="insertSector"  class ='select_css'>
                     <option value="none" selected disabled hidden>Select Sector </option>
 
                 </select>
 
-                    <button id="insert_stock_btn" type="submit">Insert Stock</button>
+                    <button id="insert_stock_btn" type="submit" class="button2" >Insert Stock</button>
                 <p id="error"></p>
                     <br>
 
-        <input id="remove_stock_name" type="text" placeholder="stock name" name="name">
-            <button id='remove_stock_btn' onclick='remove_stock()' type="submit">Remove Stock</button>
+        <input id="remove_stock_name" type="text" placeholder="stock name" class="input_field" name="name">
+            <button id='remove_stock_btn' onclick='remove_stock()' type="submit"  class ='select_css'>Remove Stock</button>
             <span id="delete_msg_status" > </span>
             <p id="stock_delete_errr"></p>
 
@@ -67,7 +72,7 @@
         <table class="stocks_table" style="background-color:beige;padding:10px;;height=200px;">
             <h2 style="padding-left:20%;">All Stocks</h2>
 
-        <select id="sort_by">
+        <select id="sort_by" class ='select_css'>
             <option value="none" selected disabled hidden>Sort By </option>
 
 
@@ -101,7 +106,7 @@
             <span >
                 <button id='search_btn' class='button'  searchType='Name' type="submit">Search Stock By Name</button>
                 <br>
-                <input  id='search_input' type="text" placeholder="name" name="name">
+                <input  id='search_input' type="text" placeholder="name" class="input_field" name="name">
 
                 <span id="not_found" style="visibility:hidden" >Not Found</span>
 
@@ -111,7 +116,7 @@
 
 
 
-<div style="margin-top:5%;margin-left:15%;">
+<div style="margin-top:3%;margin-left:10%;">
     <button class='button' onclick=" function_nav_to('sectors')">Go to main sectors page</span>
     <button class='button' onclick="function_nav_to('')">Go to main  page</span>
 </div>

@@ -5,13 +5,16 @@
     <script>
         var sectors = <%-JSON.stringify(sectors)%>;
         var num_sector = sectors.length;
-
+        $(function(){
+            let sectosView = new SectorsView(sectors);
+        sectosView.init();
+    })
 
 
 
     </script>
     <script src="/javascripts/requests.js"></script>
-    <script src="/javascripts/elements.js"></script>
+    <script src="/javascripts/display_elements.js"></script>
 
     <script type="text/javascript" src="/javascripts/events_parser.js"></script>
     <script type="text/javascript" src="/javascripts/event_controller.js"></script>
@@ -21,13 +24,14 @@
     <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
 
     <meta charset="UTF-8">
-    <title>Sectors Main Page</title>
+    <title>Sectors Page</title>
 </head>
 <body>
 
 
 
 <h1>Main Sectors Page</h1>
+    <p> Add or remove sectors, a sector that has stocks attached to it cannot be removed. </p>
 
     <div id="sectors_list">
 
@@ -40,15 +44,15 @@
 
 
     <div class="outer">
-        <div   style="float:right;padding-right:50%;">
+        <div   style="padding-bottom:20px;padding-right:50%;">
 
-            <input id="remove_sector_input"  type="text" placeholder="value" name="sectors">
-            <button id="remove_sector_bth" >Delete Sector BTN</button>
+            <input id="remove_sector_input"  type="text" placeholder="value" name="sectors" class="input_field"  >
+            <button id="remove_sector_bth" class="button2" >Delete Sector BTN</button>
 
         </div>
         <div style="padding-right:30%;">
-            <input id="insert_sector_input"  type="text" placeholder="value" name="sectors">
-                <button id="insert_sector_btn" >Insert Sector BTN</button>
+            <input id="insert_sector_input"  type="text" placeholder="value" name="sectors" class="input_field"  >
+                <button id="insert_sector_btn"   class="button2">Insert Sector BTN</button>
                 <p id="error"></p>
                 <p id="msg"></p>
         </div>
@@ -64,7 +68,7 @@
                 <button id='main_stocks' class='button' type="submit">Go to main stocks page</button>
 
             </div>
-            <div style="width:300px; float:right;">
+            <div style="width:500px; float:right;">
                 <button id='main' class='button' type="submit">Go to main  page</button>
 
             </div>

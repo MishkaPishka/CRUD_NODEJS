@@ -4,13 +4,11 @@
 const DB = require('../data/DB')
 const stocksDAO = require("./stocksDAO");
 const stock = require('./Stock');
-const stock_utils = require('./stocks_utils/utils')
+const stock_utils = require('./stocks_utils/stocks_utils')
 
 
 
 class stockService {
-        //At the moment even number fields are regarded as strings
-    //TODO - parse fields .
       update_stock(stock_name, stock_field, stock_value) {
           return new Promise((resolve, reject) => {
                   console.log('stockService - update_stock:',stock_name, stock_field, stock_value)
@@ -202,24 +200,7 @@ class stockService {
     get_sector_of_stock(stock_name) {
         return stocksDAO.get_stock_sector(stock_name);
     }
-    header_to_titles_mapping() {
-        let header_mapping = {}
-        header_mapping['52_week_high'] = '52 Week High';
-        header_mapping['52_week_low'] = '52 Week Low';
-        header_mapping['dividend_yield'] = 'Dividend Yield';
-        header_mapping['ebitda'] = 'EBITDA';
-        header_mapping['earning_to_share'] = 'Earnings/Share';
-        header_mapping['market_cap'] = 'Market Cap';
-        header_mapping['name'] = 'Name';
-        header_mapping['price'] = 'Price';
-        header_mapping['price_to_book'] = 'P/B';
-        header_mapping['pe'] = 'P/E';
-        header_mapping['price_to_sales'] = 'Price/Sales';
-        header_mapping['sec_fillings'] = 'SEC Fillings';
-        header_mapping['sector'] = 'Sector';
-        header_mapping['symbol'] = 'Symbol';
-        return header_mapping;
-    }
+
 } //END CLASS
 
 module.exports = new stockService();
