@@ -3,55 +3,66 @@
 <head>
     <meta charset="UTF-8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-        <script src="/javascripts/requests.js"></script>
-        <script src="/javascripts/display_elements.js"></script>
-
-        <script type="text/javascript" src="/javascripts/requests.js"></script>
-        <script type="text/javascript" src="/javascripts/events_parser.js"></script>
-        <script type="text/javascript" src="/javascripts/event_controller.js"></script>
-        <script type="text/javascript" src="/javascripts/pages/SectorView.js"></script>
-        <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
             <script>
+
                 let sector = <%-JSON.stringify(sector)%>;
-                console.log('sector:',sector);
+                let stocks = <%-JSON.stringify(stocks)%>;
+                // console.log('sector:',sector);
+                // console.log('stocks:',stocks);
+
                 let sector_name = sector['sector_name'];
                 let description = sector['description'];
-                let stocks =  (sector['companys'] == undefined) ? [] : sector['companys'];
+              //  console.log('sector description:',description)
+                stocks =  (stocks == undefined) ? [] : stocks;
+                let stocks_list = [];
+                for (s in stocks) {
+                   stocks_list.push(stocks[s].name);
+            }
                 let a = [];
                 let avg_data =  <%-(JSON.stringify(sector_data)==undefined ) ? ['a'] : JSON.stringify(sector_data)%>;
-                console.log('avg_data',avg_data);
+              //  console.log('avg_data',avg_data);
+                let logged =  <%- JSON.stringify(logged) %>;
 
                 let avg_price = avg_data['price'];
                 let avg_market_cap = avg_data['market_cap'];
                 let avg_dividend_yield = avg_data['dividend_yield'];
                 let y =  JSON.parse(document.cookie);
                 $(function(){
-                    let sss = new SectorView(sector_name , description ,stocks ,avg_data, y);
+                    let sss = new SectorView(sector_name , description ,stocks_list ,avg_data, y,logged);
 
                 sss.init();
-                console.log('avg_price',avg_price,' avg_price',avg_price, ' avg_market_cap',avg_market_cap,'avg_dividend_yield',avg_dividend_yield);
+             //   console.log('avg_price',avg_price,' avg_price',avg_price, ' avg_market_cap',avg_market_cap,'avg_dividend_yield',avg_dividend_yield);
             })
             </script>
+                <script src="/javascripts/display_elements.js"></script>
 
+                <script type="text/javascript" src="/javascripts/user_requests.js"></script>
+                <script type="text/javascript" src="/javascripts/events_parser.js"></script>
+                <script type="text/javascript" src="/javascripts/event_controller.js"></script>
+                <script type="text/javascript" src="/javascripts/pages/SectorView.js"></script>
+                <script type="text/javascript" src="/javascripts/modals/sign_in_modal.js"></script>
+                <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
         <title><%=sector['sector_name']%></title>
 </head>
 
 <body>
-    <p id="error"></p>
+    <div id="includedContent"></div>
+    <div id="sign_in_modal"></div>
+    <div id="error_modal"></div>
+
+
 
 
     <h1 id="sector_title"> </h1>
-    <div id="sector_description" style="width:30%; padding:10px;" >
-
+    <div style="width:90%; padding-left:10%;margin-bottom:5%;" >
+            <p class="lead"  id="sector_description"></p>
     </div>
-
-
-
-
-
-
-
 
 
         <table   class ='table_heads_stocks' style="margin-bottom:10px;">
@@ -76,39 +87,65 @@
     </table>
 
 
-    <input id="sector_description_input"  type="text" placeholder="value" name="sector_description">
-        <button id="add_sector_description" >Update Sector Description</button>
-        <br>
-            <input id="remove_stock_input"  type="text" placeholder="value" name="remove_stock_name">
-                <button id="remove_stock_btn" >Remove Stock</button>
-                <br>
-                    <input id="add_stock_input"  type="text" placeholder="value" name="add_stock_name">
-                        <button id="add_stock_btn" >Add Stock</button>
-                        <br>
-                        <p id="msg"></p>
+    <p id='error'></p>
+
+    <div class="row" style="padding-bottom:10px;padding-left:10px">
+        <input id="add_stock_input"  type="text" placeholder="value" name="add_stock_name"  class="input_field"  >
+            <button id="add_stock_btn"  class='btn btn-primary'>Add Stock</button>
 
 
-                        <div id="stocks_list">
+    </div>
+    <div class="row" style="padding-bottom:10px;padding-left:10px">
+            <input id="remove_stock_input"  type="text" placeholder="value" name="remove_stock_name" class="input_field"  >
+                <button id="remove_stock_btn"   class='btn btn-primary'>Remove Stock</button>
+
+
+
+    </div>
+    <div class="row"  style='padding-left:10px' >
+            <input id="sector_description_input" type="text" placeholder="value" name="sector_description" class="input_field" >
+                <button id="add_sector_description" class='btn btn-primary'>Update Sector Description</button>
+    </div>
+
+
+    <div class="row" style="margin-top:10px; padding-left:10px" >
+        <button id="followSector"   class='btn btn-warning' style="border:solid lightgray 2px;margin-right:10px;">Follow Sector</button>
+        <button id="unfollowSector"   class='btn btn-warning'  style="border:solid lightgray 2px">Unfollow Sector</button>
 
     </div>
 
-                            <div style="padding-top:25px">
-                                <div style="width:800px;">
-                                    <div style="width:300px; float:left;">
-                                        <button id='main' class='button' type="submit" method="GET">Go to main  page</button>
 
 
 
 
 
+    <div id="stocks_list">
+
+    </div>
 
 
-                                    </div>
-                                    <div style="width:300px; float:right;">
-                                        <button id='main_sectors' class='button' type="submit">Go to main sectors page</button>
-                                    </div>
-                                </div>
-                            </div>
+
+
+    <div class="row justify-content-between" style="margin-top:5%;">
+
+        <div class="col-2"   >
+            <button id='main'  class='btn btn-info'type="submit" method="GET">Go to main  page</button>
+
+        </div>
+        <div class="col-2"  >
+
+            <button id='main_stocks'  class='btn btn-info' type="submit" method="GET">Go to stocks  page</button>
+
+        </div>
+        <div class="col-2"  >
+
+            <button id='main_sectors' class='btn btn-info' type="submit">Go to main sectors page</button>
+
+        </div>
+
+    </div>
+
+
 
 </body>
 </html>

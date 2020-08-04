@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .content1 {
+        max-width: 500px;
+        margin: auto;
+    }
+    </style>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+                <script type="text/javascript" src="/javascripts/display_elements.js"></script>
+
+                <script type="text/javascript" src="/javascripts/event_controller.js"></script>
+                <script type="text/javascript" src="/javascripts/events_parser.js"></script>
+                <script type="text/javascript" src="/javascripts/user_requests.js"></script>
+                <script type="text/javascript" src="/javascripts/pages/MyStocksView.js"></script>
+
+                <link href="/stylesheets/style.css" rel="stylesheet" type="text/css"></link>
+                <script type="text/javascript" src="/javascripts/modals/error_modal.js"></script>
+
+
+    </head>
+
+    <script>
+        let user_info = <%-JSON.stringify(user_info)%>;
+        let first_name= user_info['first_name']
+
+        let last_name =(user_info['last_name']);
+        let email = (user_info['email']);
+
+        let logged =  <%- JSON.stringify(logged) %>;
+
+        $( "#includedContent" ).ready(function() {
+            let pageView = new MyStocksView(user_info,logged);
+                pageView.init();
+    })
+
+
+
+    </script>
+
+    <body >
+        <!--nav bar-->
+        <div id="includedContent"></div>
+
+        <div id="error_modal_top"></div>
+
+
+
+        <h3 style="text-align:center;margin-top:2%;">Personal Details:</h3>
+
+        <form  class="form-inline border border-white"  id='detailsForm' action="/users/update_details" method="post" >
+            <label for="first_name" >Name:</label>
+
+            <input type="text" class="form-control" id="first_name" placeholder="First Name" name="first_name" style='margin-left:10px;' >
+                <label for="last_name" style='margin-left:10px;' >Last name:</label>
+
+                <input type="text" class="form-control" placeholder="Last Name" id="last_name"name="last_name" style='margin-left:10px;' >
+                    <label for="email" style='margin-left:10px;'  >Email:</label>
+
+                    <input type="text" class="form-control" id="email" placeholder="Enter email" name="email">
+                        <label for="pass" style='margin-left:10px;'  >Password:</label>
+
+                        <input type="password" class="form-control" id='pass' placeholder="Enter password" name="password" style='margin-left:10px;' >
+                            <label for="pass_c" style='margin-left:10px;'  >New Password:</label>
+
+                            <input type="password" class="form-control" d='pass_c'placeholder="New password" name="confirm_password" style='margin-left:10px;' >
+                            <div>
+                                <button  id='submit_details' class="form-control btn btn-warning" style='margin-left:50px;' placeholder="Save"  name="pswd">SAVE</button>
+
+                            </div>
+
+
+
+
+        </form>
+
+        <!--user information-->
+
+       <!-- <div id="user_info"></div>-->
+
+
+
+
+
+        <div class="row"  style="margin-top:5%;">
+
+            <div class="col-sm-4">
+                <h2 style="text-align:center;"> Sectors Following</h2>
+                <div id="sectors_following" >
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+            <div class="col-sm-8">
+                <h2 style="text-align:center;">Stocks Following</h2>
+                <table class="stocks_table_following table  scrollable1"      >
+
+
+
+                    <thead class="thead-dark  scrollable1 ">
+                        <tr  class="  scrollable1 ">
+
+                            <th  >Name</th>
+                            <th  >Symbol</th>
+                            <th >Sector</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody class ="stock_table_body scrollable1"   id="table_stocks_following" >
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+        </div>
+        <div class="content1">
+            <!-- Page content -->
+
+        </div>
+
+
+        <div class="row"  style="margin-top:5%;">
+
+            <div class="col-sm-4">
+                <h2 style="text-align:center;"> Sectors Added</h2>
+
+                <div id="sectors_added" >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="col-sm-8">
+                <h2 style="text-align:center;">Stocks Added</h2>
+
+                <table class="stocks_table_added table  scrollable1"      >
+
+
+
+                    <thead class="thead-dark  scrollable1 "  >
+                        <tr  class="  scrollable1 ">
+
+                            <th  >Name</th>
+                            <th  >Symbol</th>
+                            <th >Sector</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody class ="stock_table_body scrollable1"  id ='table_stocks_added' >
+
+                    </tbody>
+
+
+                </table>
+
+
+
+            </div>
+        </div>
+
+
+
+
+       <!-- <div class=" " style="margin-bottom:0"> -->
+
+
+        <div class="row justify-content-between" style="margin-top:5%;">
+
+            <div class="col-2"   >
+                <button id='main'  class='btn btn-info' type="submit" method="GET">Go to main  page</button>
+
+            </div>
+            <div class="col-2"  >
+
+                <button id='main_stocks'  class='btn btn-info' type="submit" >Go to stocks  page</button>
+
+            </div>
+            <div class="col-2"  >
+
+                <button id='main_sectors1' class='btn btn-info' type="submit">Go to main sectors page</button>
+
+            </div>
+
+        </div>
+
+        <!--  </div>-->
+
+
+    </body>
+</html>

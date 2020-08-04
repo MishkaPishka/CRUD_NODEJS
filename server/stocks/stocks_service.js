@@ -7,7 +7,6 @@ const stock = require('./Stock');
 const stock_utils = require('./stocks_utils/stocks_utils')
 
 
-
 class stockService {
       update_stock(stock_name, stock_field, stock_value) {
           return new Promise((resolve, reject) => {
@@ -29,7 +28,19 @@ class stockService {
 
 
       }
+    get_stocks_data(stocks_list) {
+        return new Promise ( (resolve, reject) => {
+            stocksDAO.get_stocks_by_name(stocks_list)
+                .then(data=>{
 
+                    return resolve(data);
+                })
+                .catch(err=>{
+                    return reject(err);
+                })
+
+        })
+    }
     get_stocks_by_sector(sector) {
           return new Promise ( (resolve, reject) => {
               stocksDAO.get_stocks_by_sector({'sector':sector})
@@ -56,9 +67,9 @@ class stockService {
                     stocksDAO.add_stock(stock.name, stock.symbol, stock.sector)
                         .then(data => {
                             console.log('In stock service - after added stock: ' , data);
-                            return resolve(stock);
+                            return resolve(data.ops[0]);
                         })
-                    .catch(err => {console.log("error in add_stock service",err); reject(err);})
+                    .catch(err => {console.log("error in add_stock service:",err.keyValue); reject(err.keyValue);})
          })
 
 
@@ -69,11 +80,11 @@ class stockService {
         //Check if exists and remove or return error
 
         return new Promise((resolve, reject) => {
-
+                console.log('stocks service - remove stock')
                 stocksDAO.remove_stock(stock)
                     .then(data=> {
                         console.log('removed stock - ' , data);
-                        return resolve({err: 'False',msg: ('removed:',data.value)});
+                        return resolve(data.value);
                     })
                 .catch(err => reject(err))
              })

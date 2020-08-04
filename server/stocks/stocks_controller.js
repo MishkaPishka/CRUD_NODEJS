@@ -1,10 +1,11 @@
 
-
 let sectorsService = require('../sectors/sector_service');
 let stocksService = require('../stocks/stocks_service');
 const stock_utils = require('./stocks_utils/stocks_utils')
+let usersService = require('../users_info_page/users_service')
 
 class StocksController {
+
     search_stock_by_query(query) {
         return stocksService.search_stock_by_query(query);
     }
@@ -22,6 +23,23 @@ class StocksController {
 
     };
 
+
+
+    set_user_follow_stock(name, follow, email) {
+        return new Promise ( (resolve, reject) => {
+            usersService.change_status_follow_stock(email, follow, name)
+                .then(data => {
+                    return resolve(data);
+                }).catch(err => {
+                return reject(err);
+            })
+        });
+
+
+
+
+    }
+
     get_random_stock() {
         return stocksService.get_random_stock();
     }
@@ -35,16 +53,33 @@ class StocksController {
         return         stocksService.get_stock_by_name(name)
 
     }
-    add_stock(stock_to_insert) {
-        return Promise.all([ stocksService.add_stock(stock_to_insert),sectorsService.add_stock_to_sector(stock_to_insert.sector,stock_to_insert.name)])
+    add_stock(stock_to_insert,email) {
 
+      //  return Promise.all([ stocksService.add_stock(stock_to_insert),sectorsService.add_stock_to_sector(stock_to_insert.sector,stock_to_insert.name)])
+        return new Promise ( (resolve, reject) => {
+            if (sectorsService.has_sector_in_array(stock_to_insert.sector) <0 ) {
+                return reject(null)
+            }
+             usersService.user_add_stock(email,stock_to_insert.name)
+                 .then(q=>{
+                     console.log('4444444444444',q)
+                     stocksService.add_stock(stock_to_insert)
+                         .then(data=>{
 
+                             return resolve(data);
+                         }).catch(err=>{reject(err);})
+                 })
+
+                .catch(err=>{reject(err);})
+        })
 
 
 
     }
     remove_stock(stock_name) {
-        return Promise.all([ stocksService.remove_stock(stock_name),sectorsService.remove_stock_from_sector_by_stock_name(stock_name)])
+        console.log('remove stocks - stocks controller')
+       return  Promise.all([ stocksService.remove_stock(stock_name),sectorsService.remove_stock_from_sector_by_stock_name(stock_name),usersService.remove_stock_by_name_from_users(stock_name)])
+
 
 
 

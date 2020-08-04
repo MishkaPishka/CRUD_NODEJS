@@ -18,7 +18,6 @@ class stocks_utils {
     cleanStock(stock) {
          if (stock !=null) {
 
-             console.log(stock,"AAA");
             delete stock["_id"];
             delete stock["field"];
          }
@@ -39,24 +38,8 @@ class stocks_utils {
 
      }
 
-     header_to_mapping() {
-         let header_mapping = {}
-         header_mapping['52_week_high'] = '52 Week High';
-         header_mapping['52_week_low'] = '52 Week Low';
-         header_mapping['dividend_yield'] = 'Dividend Yield';
-         header_mapping['ebitda'] = 'EBITDA';
-         header_mapping['earning_to_share'] = 'Earnings/Share';
-         header_mapping['market_cap'] = 'Market Cap';
-         header_mapping['name'] = 'Name';
-         header_mapping['price'] = 'Price';
-         header_mapping['price_to_book'] = 'P/B';
-         header_mapping['pe'] = 'P/E';
-         header_mapping['price_to_sales'] = 'Price/Sales';
-         header_mapping['sec_fillings'] = 'SEC Fillings';
-         header_mapping['sector'] = 'Sector';
-         header_mapping['symbol'] = 'Symbol';
-         return header_mapping;
-     }
+
+
 
 }
 

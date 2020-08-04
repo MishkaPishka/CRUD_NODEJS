@@ -1,5 +1,6 @@
 
 
+
 const DB = require('../data/DB')
 let Stock = require('./Stock');
 
@@ -7,6 +8,10 @@ let stocksDB = DB.db.collection('firms_data');
 
 class stocksDAO {
 
+    get_stocks_by_name(stocks_list) {
+        return stocksDB.find({ "name": { "$in": stocks_list } },{projection: {_id: 0}}).toArray()
+       // return this.get_random_stock();
+    }
 
     update_stock(stock_name, stock_data) {
         console.log("dao - stock stock_data:", stock_data, {"name": stock_name});
@@ -69,6 +74,7 @@ class stocksDAO {
     }
 
     remove_stock(stock_name, stock_symbol, stock_sector) {
+        console.log('stocks dao - remove stock')
         return stocksDB.findOneAndDelete({name: stock_name})
 
     }
@@ -85,7 +91,7 @@ class stocksDAO {
     }
 
     get_stocks_by_sector(sector_name) {
-        return stocksDB.find(sector_name).toArray();
+        return stocksDB.find(sector_name, {projection: {_id:0,name: 1}}).toArray();
     }
 
 

@@ -3,67 +3,132 @@
 <head>
     <meta charset="UTF-8">
         <title><%=stock.name%></title>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/javascripts/display_elements.js"></script>
-        <script type="text/javascript" src="/javascripts/requests.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+                <script>
+                    let logged =  <%- JSON.stringify(logged) %>;
+
+                    $(function(){
+                    let st = <%- JSON.stringify(stock) %>
+
+                    let sector = st['sector'];
+                    let stock_fields =  JSON.parse(document.cookie);
+                    let stockView = new StockView (st,stock_fields,sector,logged);
+
+                    stockView.init();
+                })
+                </script>
+
+                <script type="text/javascript" src="/javascripts/display_elements.js"></script>
+        <script type="text/javascript" src="/javascripts/user_requests.js"></script>
         <script type="text/javascript" src="/javascripts/events_parser.js"></script>
         <script type="text/javascript" src="/javascripts/event_controller.js"></script>
         <script type="text/javascript" src="/javascripts/pages/stock_loader.js"></script>
+                <script type="text/javascript" src="/javascripts/modals/sign_in_modal.js"></script>
         <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
 
-        <script>
-
-            $(function(){
-                let st = <%- JSON.stringify(stock) %>
-                let sector = st['sector'];
-                let stock_fields =  JSON.parse(document.cookie);
-                let stockView = new StockView (st,stock_fields,sector);
-                stockView.init();
-        })
-        </script>
 
 
 </head>
 <body>
+    <div id="includedContent"></div>
+    <div id="sign_in_modal"></div>
+    <div id="error_modal"></div>
 
+
+    <div class="row">
+    <div class="col-md-8">
 
     <table   class ='table_heads_stocks'>
 
-
     </table>
+        </div>
 
 
-    <span >
-        <header   style="width:30%;text-align:center;"  >
-            <h2>Update Stock </h2><p id="error"></p>
-        </header>
-   <section>
+    <div class="col-sm-4">
+
+            <div class="row">
+
+                <div style="    margin-top:10px;    border-color: beige; border-style: solid; border-width: 1px;">
 
 
-   <select id ='stock_fields_select' class ='select_css'>
-       <option value="none" selected disabled hidden>Select Field </option>
+                    <p id="error"></p>
+                    <h3 style="text-align:center">Update Stock</h3>
+                    <div class="row">
+                        <div class="col-sm-3" style="width:50%">
 
-   </select >
+                            <button id="update_stock_btn" class='btn btn-primary'   >Update Stock Stock</button>
+                            <p id ="error"></p>
 
-       <input id="update_stock_value"  class="input_field" type="text" placeholder="value" name="sector">
-           <button id="update_stock_btn" class="button2" >Update Stock Stock</button>
-            <p id ="error"></p>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <select id ='stock_fields_select' class ='select_css'>
+                                    <option value="none" selected disabled hidden>Select Field </option>
+                                </select >
+                            </div>
 
-   </section>
+                            <div class="row" style="margin-top:10px">
+                                <input id="update_stock_value"  class="input_field" type="text" placeholder="value" name="sector" style="width:63%">
+                            </div>
+
+                        </div>
 
 
-    </span>
+                        <div class="col">
+                            <button id="followStock"   class='btn btn-warning'  style="border:solid lightgray 2px;width:80%">Follow Stock</button>
+                            <button id="unfollowStock"   class='btn btn-warning' style="border:solid lightgray 2px;;width:80%;margin-top:2px" >Unfollow Stock</button>
 
-    <button id='main' class='button'  type="submit" method="GET">Go to main  page</button>
+                            <p id="error"></p>
+                            <p id="msg"></p>
+                        </div>
+                    </div>
+                </div>
 
-    <button id='main_stocks' class='button'  type="submit">Go to main stocks page</button>
-    <button id='go_sector' class='button' type="submit">Go to sector </button>
-<div>
 
+            </div>
+        <div class="row" style="margin-top:10px">
+            <h2  style="text-align:center;width:100%">Stock Description</h2>
+                <input id="update_stock_value"  class="input_field" type="text" placeholder="value" name="sector" style="width:63%">
+                    <button id="update_stock_dsc"   class='btn btn-primary'  >Update Description</button>
+
+                <p class="lead" id="stock_dsc"></p>
+        </div>
+
+    </div>
 
 
 
 
 </div>
+
+
+
+
+
+    <div class="row justify-content-between" style="margin-top:5%;">
+
+        <div class="col-2"   >
+
+            <button id='main_stocks' class='btn btn-info' type="submit" method="GET">Go to main stocks page</button>
+        </div>
+        <div class="col-2"  >
+
+            <button id='main'  class='btn btn-info' type="submit">Go to main page</button>
+
+        </div>
+        <div  >
+
+            <button id='go_sector' class='btn btn-info' type="submit">Go to sector </button>
+
+        </div>
+    </div>
+
 </body>
 </html>

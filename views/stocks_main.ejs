@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
 
-    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/javascripts/display_elements.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-        <script type="text/javascript" src="/javascripts/requests.js"></script>
-        <script type="text/javascript" src="/javascripts/events_parser.js"></script>
-        <script type="text/javascript" src="/javascripts/event_controller.js"></script>
 
-        <script type="text/javascript" src="/javascripts/pages/stocks_loader.js"></script>
 
         <script>
             let stocks = <%-JSON.stringify(stocks)%>;
@@ -21,110 +20,167 @@
             sectors = map;
             let stocks_fields = document.cookie;
             stocks_fields = JSON.parse(stocks_fields);
+            let logged =  <%- JSON.stringify(logged) %>;
+
             $(function(){
-                let stocksView = new StocksView(stocks_fields,sectors,stocks);
+                let stocksView = new StocksView(stocks_fields,sectors,stocks,logged);
                 stocksView.init();
         })
         </script>
+                <script type="text/javascript" src="/javascripts/display_elements.js"></script>
+
+                <script type="text/javascript" src="/javascripts/user_requests.js"></script>
+                <script type="text/javascript" src="/javascripts/events_parser.js"></script>
+                <script type="text/javascript" src="/javascripts/event_controller.js"></script>
+
+                <script type="text/javascript" src="/javascripts/pages/stocks_loader.js"></script>
+                <script type="text/javascript" src="/javascripts/modals/sign_in_modal.js"></script>
+
+                <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
         <meta charset="UTF-8">
     <title>Stocks Main Page</title>
 </head>
-<body>
-    <script>
+<body >
+
+    <div id="includedContent"></div>
+    <div id="sign_in_modal"></div>
+    <div id="error_modal"></div>
+
+    <div class="row">
+        <h2>Stocks Main Page</h2>
+        <p> Add or remove stocks, a sector that has stocks attached to it cannot be removed. The s&p 500 index is built from sevral indexes covering most of the economical fields in the US.
+            t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search
+        </p>
+    </div>
+
+    <div class="row">
+
+                <div class="col">
+
+                    <h2 style="text-align:center">All Stocks</h2>
+
+                    <div class="row" >
+                        <div style="margin-left:1%;width:15%">
+                            <select id="sort_by"  class ='select_css custom-select' >
+                                <option value="none"   selected disabled hidden>Sort By</option>
+
+                            </select>
+
+                        </div>
+
+                        <div  style="margin-left:20%;">
+
+                                <span id="not_found" class='font-italic' style="visibility:hidden;">Stock Not Found </span>
+
+                                <button id='search_btn' class='btn btn-light'  searchType='name'  type="submit">Search Stock By Name:</button>
+
+                                <input  id='search_input' type="text" placeholder="name" class="input_field"  name="name"></input>
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div style="float:left;">
+                        <table class="stocks_table table  scrollable1"         >
+
+
+
+                            <thead class="thead-dark  scrollable1 ">
+                                <tr  class="  scrollable1 ">
+
+                                    <th  >Name</th>
+                                    <th  >Symbol</th>
+                                    <th >Sector</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody class ="stock_table_body scrollable1"   id ='table_all_stocks'  >
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+
+
+                 </div>
+
+                <div class="col-md-2">
+                    <div style="margin-top:25%;text-align: center;border:solid 1px papayawhip">
+                        <button id="insert_stock_btn" type="submit" class='btn btn-primary' style="margin-top:10%;" >Insert Stock</button>
+                        <div style="margin-top:10px;    border-color: beige; border-style: solid; border-width: 1px;">
+
+
+                            <input id="insert_name" class="input_field"  style="margin-bottom:10%;width:100%"type="text" placeholder="stock name" name="name"></input>
+
+                            <input id="insert_symbol"   style="margin-bottom:10%;width:100%"  class="input_field"  type="text" placeholder="stock symbol" name="symbol"></input>
+                            <select id="insertSector"  class ='select_css'    style="width:100%">
+                                <option value="none" selected disabled hidden>Select Sector </option>
+
+                            </select>
+                            <p id="error"></p>
+                        </div>
+
+
+                    </div>
 
 
 
 
-
-
-
-</script>
-<h1>Stocks Main Page</h1>
-
-
-
-    <span>
-        <input id="insert_name" class="input_field" type="text" placeholder="stock name" name="name">
-            <input id="insert_symbol"   class="input_field" type="text" placeholder="stock symbol" name="symbol">
-
-                <select id="insertSector"  class ='select_css'>
-                    <option value="none" selected disabled hidden>Select Sector </option>
-
-                </select>
-
-                    <button id="insert_stock_btn" type="submit" class="button2" >Insert Stock</button>
-                <p id="error"></p>
-                    <br>
-
-        <input id="remove_stock_name" type="text" placeholder="stock name" class="input_field" name="name">
-            <button id='remove_stock_btn' onclick='remove_stock()' type="submit"  class ='select_css'>Remove Stock</button>
-            <span id="delete_msg_status" > </span>
-            <p id="stock_delete_errr"></p>
-
-            </span >
-    <br>
-    <span >
-
-
-
-
-
-        <table class="stocks_table" style="background-color:beige;padding:10px;;height=200px;">
-            <h2 style="padding-left:20%;">All Stocks</h2>
-
-        <select id="sort_by" class ='select_css'>
-            <option value="none" selected disabled hidden>Sort By </option>
-
-
-
-        </select>
-            <table>
-            <thead >
-                <tr  >
-
-                    <th class ='table_heads' style="width:250px;height:50px;" >Name</th>
-                    <th class ='table_heads'  >Symbol</th>
-                    <th class ='table_heads'  >Sector</th>
-                </tr>
-            </thead>
-    </table>
-
-        <div style="overflow:auto;width:750px;height:450px;">
-            <table>
-
-                <tbody class ="stock_table_body" >
-
-
-                </tbody>
-
-
-            </table>
-
+                </div>
+        <div class="col-md-1" style="padding-top:20%;">
+            <h2  >Some Extra Content</h2>
+            <img src="/images/coming-soon.jpg" alt="...">
         </div>
 
-        <div style="padding-left:20%;">
-            <span >
-                <button id='search_btn' class='button'  searchType='Name' type="submit">Search Stock By Name</button>
-                <br>
-                <input  id='search_input' type="text" placeholder="name" class="input_field" name="name">
+        <div class="col-sm-2  " >
 
-                <span id="not_found" style="visibility:hidden" >Not Found</span>
+                    <div style="margin-top:25%;text-align: center;border:solid 1px papayawhip">
+                    <button id='remove_stock_btn' onclick='remove_stock()' type="submit"  class ='btn btn-primary'  style="margin-top:10%;" >Remove Stock</button>
 
-            </span>
+                    <br></br>
+                    <input id="remove_stock_name" type="text" style="width:100%" placeholder="stock name" class="input_field" name="name"></input>
+
+                    <span id="delete_msg_status" > </span>
+
+                </div>
 
             </div>
 
 
+    </div>
 
-<div style="margin-top:3%;margin-left:10%;">
-    <button class='button' onclick=" function_nav_to('sectors')">Go to main sectors page</span>
-    <button class='button' onclick="function_nav_to('')">Go to main  page</span>
-</div>
 
+
+
+
+
+
+
+    <!-- Bottom-->
+            <div class=" text-center" style="margin-bottom:0">
+
+                <div class="row justify-content-between" style="margin-top:5%;">
+
+                    <div class="col-2"   >
+
+                        <button id='main_sectorsb'  class='btn btn-info' type="submit">Go to main sectors page</button>
+                    </div>
+                    <div class="col-2"  >
+
+                        <button id='main'  class='btn btn-info' type="submit">Go to main  page</button>
+                    </div>
+
+            </div>
 
 
 
 
 
 </body>
-</html>
+
+                </html>

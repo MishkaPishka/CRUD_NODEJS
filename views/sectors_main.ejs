@@ -2,36 +2,51 @@
 <html lang="en">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
     <script>
+
         var sectors = <%-JSON.stringify(sectors)%>;
         var num_sector = sectors.length;
+        let logged =  <%- JSON.stringify(logged) %>;
+
         $(function(){
-            let sectosView = new SectorsView(sectors);
-        sectosView.init();
+            let sectosView = new SectorsView(sectors,logged);
+            sectosView.init();
+
     })
 
 
 
     </script>
-    <script src="/javascripts/requests.js"></script>
+    <script src="/javascripts/user_requests.js"></script>
     <script src="/javascripts/display_elements.js"></script>
 
     <script type="text/javascript" src="/javascripts/events_parser.js"></script>
     <script type="text/javascript" src="/javascripts/event_controller.js"></script>
 
     <script type="text/javascript" src="/javascripts/pages/sectors_loader.js"></script>
+     <script type="text/javascript" src="/javascripts/modals/sign_in_modal.js"></script>
 
     <link href="/stylesheets/style.css" rel="stylesheet" type="text/css">
 
     <meta charset="UTF-8">
     <title>Sectors Page</title>
 </head>
-<body>
+<body style="background-color:whitesmoke">
 
+    <div id="sign_in_modal"></div>
+    <div id="error_modal"></div>
 
+    <div id="includedContent"></div>
 
-<h1>Main Sectors Page</h1>
-    <p> Add or remove sectors, a sector that has stocks attached to it cannot be removed. </p>
+<h2>Main Sectors Page</h2>
+<p> Add or remove sectors, a sector that has stocks attached to it cannot be removed. The s&p 500 index is built from sevral indexes covering most of the economical fields in the US.</p>
 
     <div id="sectors_list">
 
@@ -43,38 +58,36 @@
 
 
 
-    <div class="outer">
-        <div   style="padding-bottom:20px;padding-right:50%;">
+    <div class="outer" >
+        <div   style="padding-top:10px;padding-bottom:20px;padding-right:50%;">
 
             <input id="remove_sector_input"  type="text" placeholder="value" name="sectors" class="input_field"  >
-            <button id="remove_sector_bth" class="button2" >Delete Sector BTN</button>
+            <button id="remove_sector_bth" class='btn btn-primary' >Delete Sector BTN</button>
+                <p id="remove_status"></p>
+
 
         </div>
         <div style="padding-right:30%;">
             <input id="insert_sector_input"  type="text" placeholder="value" name="sectors" class="input_field"  >
-                <button id="insert_sector_btn"   class="button2">Insert Sector BTN</button>
-                <p id="error"></p>
-                <p id="msg"></p>
+                <button id="insert_sector_btn"   class='btn btn-primary'>Insert Sector BTN</button>
+                <p id="insert_status"></p>
         </div>
 
     </div>
 
-    <div style="padding-top:25px">
-        <div style="width:800px;">
-            <div style="width:300px; float:left;">
 
 
 
-                <button id='main_stocks' class='button' type="submit">Go to main stocks page</button>
+    <div class="row justify-content-between" style="margin-top:5%;">
 
-            </div>
-            <div style="width:500px; float:right;">
-                <button id='main' class='button' type="submit">Go to main  page</button>
+        <div class="col-2"   >
 
-            </div>
+            <button id='main_stocks' class='btn btn-info' type="submit" method="GET">Go to main stocks page</button>
         </div>
+        <div class="col-2"  >
+
+            <button id='main'  class='btn btn-info' type="submit">Go to main page</button>
         </div>
-
-
+    </div>
 </body>
 </html>

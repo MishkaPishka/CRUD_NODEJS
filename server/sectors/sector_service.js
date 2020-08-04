@@ -5,6 +5,36 @@ let stockService = require('../stocks/stocks_service');
 
 class SectorsService {
 
+    constructor() {
+       this.get_names_sectors()
+            .then(data=> {
+                this.list_of_sectors = data;
+            });
+    }
+    has_sector_in_array(name) {
+        var i = this.list_of_sectors.length;
+        while (i--) {
+            if (this.list_of_sectors[i] == name) {
+                return i
+                //  this.list_of_sectors[i].splice(i, 1);
+
+
+
+            }
+        }
+        return -1;
+    }
+    remove_sector_from_array(name){
+        let i = this.has_sector_in_array(name);
+        if (i>0){
+            this.list_of_sectors[i] ='';
+        }
+
+    }
+    add_sector_to_array(name) {
+        this.list_of_sectors.push(name);
+    }
+
     get_names_sectors() {
         return new Promise((resolve, reject) => {
             sectorsDAObject.get_names_sectors()
@@ -60,13 +90,18 @@ class SectorsService {
     }
 
      remove_sector(sector_name) {
+
          let query = {}
          query['sector_name'] = sector_name;
          query['companys'] = [];
+
+
          return sectorsDAObject.remove_sector(query);
 
     }
     insert_sector(sector_name) {
+        this.add_sector_to_array(sector_name)
+
         return sectorsDAObject.insert_sector(sector_name);
     }
 }

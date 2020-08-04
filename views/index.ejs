@@ -3,108 +3,137 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"></link>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="/javascripts/display_elements.js"></script>
-
     <script type="text/javascript" src="/javascripts/event_controller.js"></script>
     <script type="text/javascript" src="/javascripts/events_parser.js"></script>
-    <script type="text/javascript" src="/javascripts/requests.js"></script>
+    <script type="text/javascript" src="/javascripts/user_requests.js"></script>
     <script type="text/javascript" src="/javascripts/pages/IndexView.js"></script>
     <link href="/stylesheets/style.css" rel="stylesheet" type="text/css"></link>
+    <title>Stock & Stuff</title>
 
 </head>
 
+
 <script>
 
+    let logged =  <%- JSON.stringify(logged) %>;
     $(function(){
-    let sectors_names= <%- JSON.stringify(sectors_dictionary)%>;
-    let header_mapping=  <%- JSON.stringify(header_mapping)%>;
-    let featured =  <%-JSON.stringify(featured)%>;
-    document.cookie = JSON.stringify( header_mapping);
-    let stocks = <%-JSON.stringify( stocks)%>;
-    $aR = [header_mapping,sectors_names,featured];
+        let sectors_names= <%-  JSON.stringify(sectors_dictionary) %>;
+        let header_mapping=  <%-  JSON.stringify(header_mapping) %>;
+        let featured =  <%- JSON.stringify(featured) %>;
+        let stocks = <%- JSON.stringify( stocks) %>;
+        let title = '<%- (title)  %> ';
 
-        let indexView = new IndexView(featured,sectors_names,header_mapping,stocks)
-        indexView.init_bla();
+        document.header_mapping = JSON.stringify( header_mapping);
+        $aR = [header_mapping,sectors_names,featured];
+        let indexView = new IndexView(featured,sectors_names,header_mapping,stocks,logged)
+        indexView.init_main_page_view();
 
-
-})
+    })
 
 </script>
 
-<body>
+<body >
 
-    <h1 style="margin-bottom:10px;"><%= title %></h1>
-    <div class="featured_stock">
+    <div id="includedContent"></div>
 
-        <table   class ='table_heads_stocks'>
-            <h2 id="gotostoc">Featured stock of the day: <%=featured.name%></h2>
+    <div class="container-fluid"  style="margin-top:30px;">
+        <div class="row">
+            <div class="col-sm-2" >
+                <div id="sectors_list" >
+                </div>
+            </div>
 
-        </table>
+            <div class="col-sm-10">
+                <div class="featured_stock">
+                    <h2  style="text-align:center;">Featured stock of the day</h2>
 
+                    <table   class ='table_heads_stocks'>
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <div>
-        <button id='main_stocks' class='button' type="submit" method="GET">Go to main stocks page</button>
-
-        <button id='main_sectors' class='button' type="submit">Go to main sectors page</button>
 
 
-
-
-
-    </div>
     <div >
 
 
-        <table class="stocks_table" style="background-color:beige;padding:10px;">
-            <h2 style="margin-left:10%">Top 10 Stocks</h2>
+        <table class="stocks_table table">
+            <h2 style="text-align:center">Top 10 Stocks</h2>
+            <div class="row">
+                <div class="col" >
+                    <select id="sort_by"  class ='select_css custom-select' style="width:20%">
+                        <option value="none"   selected disabled hidden>Sort By</option>
+
+
+                    </select>
+
+                </div>
+
+                <div class="col" >
+                    <span style="float:right;">
+                        <span id="not_found" class='font-italic' style="visibility:hidden;">Stock Not Found </span>
+
+                        <button id='search_btn' class='btn btn-light'  searchType='name'  type="submit">Search Stock By Name:</button>
+
+                            <input  id='search_input' type="text" placeholder="name" class="input_field"  name="name">
+
+
+                    </span>
+                </div>
+            </div>
 
 
 
-            <select id="sort_by"  class ='select_css'>
-                <option value="none" selected disabled hidden>Sort By</option>
 
+            <thead  class="thead-dark">
+                <tr style="width:100%;">
 
-            </select>
-
-            <thead >
-                <tr >
-
-                    <th class ='table_heads'>Name</th>
-                    <th class ='table_heads' >Symbol</th>
-                    <th class ='table_heads' >Sector</th>
+                    <th class="thWidth">Name</th>
+                    <th  class="thWidth">Symbol</th>
+                    <th class="thWidth" >Sector</th>
                 </tr>
             </thead>
 
-            <tbody class ="stock_table_body">
+            <tbody class ="stock_table_body" id="stocks_table_main">
 
             </tbody>
 
 
         </table>
 
-        <span >
-            <button id='search_btn' class='button'  searchType='name'  type="submit">Search Stock By Name</button>
-            <br>
-                <input  id='search_input' type="text" placeholder="name" class="input_field"  name="name">
 
-                    <span id="not_found" style="visibility:hidden" >Not Found</span>
 
-        </span>
-
-        <div id="sectors_list">
-
-        </div>
-        <iframe src="https://datahub.io/core/s-and-p-500/view/0" width="100%" height="475px" frameborder="0"></iframe>
 
     </div>
 
 
 
 
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <h3 style="text-align:center"> S&P Preformance overall</h3>
+        <iframe src="https://datahub.io/core/s-and-p-500/view/0" width="100%" height="475px" frameborder="0"></iframe>
 
+        <div class="row justify-content-between" style="margin-top:5%;">
+
+            <div class="col-2"   >
+
+                <button id='main_stocks' class='btn btn-info' type="submit" method="GET">Go to main stocks page</button>
+            </div>
+            <div class="col-2"  >
+
+            <button id='main_sectorsb'  class='btn btn-info' type="submit">Go to main sectors page</button>
+            </div>
+            </div>
+    </div>
 
 
 

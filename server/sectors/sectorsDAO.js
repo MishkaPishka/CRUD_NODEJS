@@ -40,6 +40,7 @@ class sectorsDAO {
     }
 
     remove_stock_from_sector_by_stock_name(stock) {
+        console.log('remove stock from sector by stock name =',stock)
         return sectorsDB.update(
             {},
             {$pull: {companys: { $in: [ stock ] } }},{multi:true}
